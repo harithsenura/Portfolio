@@ -33,14 +33,8 @@ export default function Header() {
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 50 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "backdrop-blur-lg bg-white/80 dark:bg-gray-900/80 shadow-lg border-b border-white/20 dark:border-gray-700/30"
-          : "bg-transparent"
+        scrolled ? "glass-effect shadow-lg" : "bg-transparent"
       }`}
-      style={{
-        // Ensure background lines are completely hidden when scrolled
-        backgroundImage: scrolled ? "none" : "inherit",
-      }}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
@@ -86,11 +80,7 @@ export default function Header() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden backdrop-blur-lg bg-white/90 dark:bg-gray-900/90 border-t border-white/20 dark:border-gray-700/30"
-          style={{
-            // Ensure mobile menu also has solid background
-            backgroundImage: "none",
-          }}
+          className="md:hidden glass-effect"
         >
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
             {navItems.map((item) => (
