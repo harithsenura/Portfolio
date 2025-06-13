@@ -10,11 +10,13 @@ import Testimonials from "@/components/testimonials"
 import Contact from "@/components/contact"
 import Footer from "@/components/footer"
 import AnimatedBackground from "@/components/animated-background"
+import FloatingNavigation from "@/components/floating-navigation"
 
 export default function Home() {
   return (
     <main className="min-h-screen">
       <AnimatedBackground />
+      <FloatingNavigation />
       <Hero />
       <About />
       <Skills />
