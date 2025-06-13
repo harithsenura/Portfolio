@@ -51,7 +51,7 @@ export default function Hero() {
           >
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white/20 shadow-xl relative mx-auto">
               <Image
-                src="/placeholder.svg?height=160&width=160"
+                src="/PDP.jpeg?height=160&width=160"
                 alt="Your Name"
                 width={160}
                 height={160}
