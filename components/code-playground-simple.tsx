@@ -320,7 +320,7 @@ function highlightCode(code: string, language: string) {
     highlighted = highlighted.replace(/([.#][a-zA-Z0-9_-]+)/g, '<span style="color: #61afef;">$1</span>')
 
     // CSS comments
-    highlighted = highlighted.replace(/(\/\*.*?\*\/)/g, '<span style="color: #7f848e;">$1</span>')
+    highlighted = highlighted.replace(/(\/\*.*?\*\/)/gs, '<span style="color: #7f848e;">$1</span>')
   }
 
   return highlighted
@@ -542,7 +542,7 @@ export default function CodePlaygroundSimple() {
                       {activeSnippet.language}
                     </span>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 items-center">
                     {/* Mobile fullscreen toggle */}
                     {isMobileView && (
                       <Button
@@ -566,15 +566,6 @@ export default function CodePlaygroundSimple() {
                       size="sm"
                       variant="glass"
                       className="code-playground-button h-6 px-1 text-[9px]"
-                      onClick={handleRun}
-                      disabled={isRunning}
-                    >
-                      {isRunning ? <RefreshCw className="h-3 w-3" /> : <Play className="h-3 w-3" />}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="glass"
-                      className="code-playground-button h-6 px-1 text-[9px]"
                       onClick={handleCopy}
                     >
                       {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
@@ -587,6 +578,80 @@ export default function CodePlaygroundSimple() {
                     >
                       <RefreshCw className="h-3 w-3" />
                     </Button>
+
+                    {/* Separator */}
+                    <div className="w-px h-4 bg-white/20 dark:bg-gray-700/30 mx-2"></div>
+
+                    {/* Special Liquid Glass Run Button */}
+                    <motion.button
+                      onClick={handleRun}
+                      disabled={isRunning}
+                      className="liquid-run-button"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      style={{
+                        position: "relative",
+                        overflow: "hidden",
+                        padding: isSmallMobile ? "0.25rem 0.5rem" : "0.375rem 0.75rem",
+                        borderRadius: "9999px",
+                        fontSize: isSmallMobile ? "9px" : "10px",
+                        fontWeight: "600",
+                        border: "none",
+                        background: "linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(59, 130, 246, 0.6))",
+                        backdropFilter: "blur(12px)",
+                        boxShadow: "0 4px 15px rgba(139, 92, 246, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3)",
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.25rem",
+                        transition: "all 0.3s ease",
+                        cursor: isRunning ? "not-allowed" : "pointer",
+                        opacity: isRunning ? 0.7 : 1,
+                      }}
+                    >
+                      {/* Liquid flowing background effect */}
+                      <motion.div
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          background: "linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent)",
+                          backgroundSize: "200% 200%",
+                        }}
+                        animate={{
+                          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "linear",
+                        }}
+                      />
+
+                      {/* Button content */}
+                      <div className="relative z-10 flex items-center gap-1">
+                        {isRunning ? <RefreshCw className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
+                        <span className="hidden sm:inline">{isRunning ? "Running..." : "Run"}</span>
+                      </div>
+
+                      {/* Glowing border effect */}
+                      <motion.div
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          background: "linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(59, 130, 246, 0.4))",
+                          filter: "blur(8px)",
+                          opacity: 0.7,
+                          zIndex: -1,
+                        }}
+                        animate={{
+                          scale: [1, 1.1, 1],
+                          opacity: [0.7, 0.9, 0.7],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    </motion.button>
                   </div>
                 </div>
 
@@ -677,7 +742,7 @@ export default function CodePlaygroundSimple() {
         </div>
       </div>
 
-      {/* Inside Games 022 Animation Overlay - Simplified Dark Blur */}
+      {/* Inside Games 022 Animation Overlay - Compact Version */}
       <AnimatePresence>
         {showInsideGamesAnimation && (
           <motion.div
@@ -687,153 +752,221 @@ export default function CodePlaygroundSimple() {
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed inset-0 z-50 flex items-center justify-center"
             style={{
-              background: "rgba(0, 0, 0, 0.85)",
-              backdropFilter: "blur(15px)",
+              background: resolvedTheme === "dark" ? "rgba(0, 0, 0, 0.95)" : "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(20px)",
             }}
             onClick={() => setShowInsideGamesAnimation(false)}
           >
-            {/* Simple Content Container */}
+            {/* Compact Content Container */}
             <motion.div
-              className="relative z-10 max-w-4xl mx-auto px-6"
-              initial={{ opacity: 0, scale: 0.95 }}
+              className="relative z-10 max-w-5xl mx-auto px-6 text-center"
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              {/* Main Content */}
-              <div className="text-center">
-                <motion.h1
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-                  className="text-4xl sm:text-6xl md:text-7xl font-bold text-white mb-6"
-                  style={{
-                    textShadow: "0 0 30px rgba(139, 92, 246, 0.6)",
-                  }}
-                >
-                  Inside Games 022
-                </motion.h1>
+              {/* Gaming Icons Header - Reduced */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.6 }}
+                className="flex justify-center gap-3 mb-4"
+              >
+                {["🎮", "🕹️", "🎯", "🏆"].map((icon, index) => (
+                  <motion.div
+                    key={index}
+                    className="text-2xl sm:text-3xl"
+                    animate={{
+                      y: [0, -8, 0],
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      delay: index * 0.2,
+                      repeat: Number.POSITIVE_INFINITY,
+                      repeatType: "reverse",
+                    }}
+                  >
+                    {icon}
+                  </motion.div>
+                ))}
+              </motion.div>
 
-                <motion.p
-                  initial={{ y: 15, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
-                  className="text-xl sm:text-2xl md:text-3xl text-white/90 mb-8 font-light"
-                >
-                  Your Ultimate Gaming Destination
-                </motion.p>
+              {/* Main Title - Smaller */}
+              <motion.h1
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+                className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-3 ${
+                  resolvedTheme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+                style={{
+                  textShadow:
+                    resolvedTheme === "dark" ? "0 0 30px rgba(139, 92, 246, 0.8)" : "0 0 30px rgba(139, 92, 246, 0.6)",
+                }}
+              >
+                Inside Games 022
+              </motion.h1>
 
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
-                  className="h-1 mx-auto mb-10 rounded-full"
-                  style={{
-                    width: "200px",
-                    background: "linear-gradient(90deg, #8b5cf6, #3b82f6)",
-                    boxShadow: "0 0 15px rgba(139, 92, 246, 0.5)",
-                  }}
-                />
+              {/* Subtitle - Smaller */}
+              <motion.p
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
+                className={`text-lg sm:text-xl md:text-2xl mb-4 font-light ${
+                  resolvedTheme === "dark" ? "text-white/90" : "text-gray-800/90"
+                }`}
+              >
+                Your Ultimate Gaming Destination
+              </motion.p>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                  className="mb-10"
-                >
-                  <p className="text-white/80 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-                    Discover the latest games, reviews, news, and gaming community. Join thousands of gamers in the
-                    ultimate gaming experience!
-                  </p>
+              {/* Animated Underline - Smaller */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.6, duration: 1, ease: "easeOut" }}
+                className="h-1 mx-auto mb-6 rounded-full"
+                style={{
+                  width: "200px",
+                  background: "linear-gradient(90deg, #8b5cf6, #3b82f6, #06b6d4)",
+                  boxShadow:
+                    resolvedTheme === "dark" ? "0 0 15px rgba(139, 92, 246, 0.6)" : "0 0 15px rgba(139, 92, 246, 0.4)",
+                }}
+              />
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                    {[
-                      { icon: "🎮", label: "Latest Games" },
-                      { icon: "🏆", label: "Tournaments" },
-                      { icon: "👥", label: "Community" },
-                      { icon: "📰", label: "Gaming News" },
-                    ].map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.0 + index * 0.1, duration: 0.5, ease: "easeOut" }}
-                        className="flex flex-col items-center gap-3 p-4 rounded-xl"
-                        style={{
-                          background: "rgba(255, 255, 255, 0.08)",
-                          backdropFilter: "blur(10px)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                        }}
-                      >
-                        <span className="text-3xl">{item.icon}</span>
-                        <span className="text-white text-sm font-medium">{item.label}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.6, duration: 0.6, ease: "easeOut" }}
-                  className="flex justify-center gap-4 mb-10"
-                >
-                  {["🎮", "🕹️", "🎯", "🏆"].map((icon, index) => (
-                    <motion.div
-                      key={index}
-                      className="text-3xl sm:text-4xl cursor-pointer"
-                      whileHover={{
-                        scale: 1.2,
-                        transition: { duration: 0.3 },
-                      }}
-                    >
-                      {icon}
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 1.8, duration: 0.6, ease: "easeOut" }}
-                  className="text-center"
-                >
-                  <motion.button
-                    className="px-8 py-3 rounded-full font-bold text-lg transition-all duration-300"
+              {/* Compact Feature Cards - 4 only */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
+              >
+                {[
+                  { icon: "🎮", title: "Latest Games", desc: "New releases" },
+                  { icon: "🏆", title: "Tournaments", desc: "Compete & win" },
+                  { icon: "👥", title: "Community", desc: "Join gamers" },
+                  { icon: "📰", title: "Gaming News", desc: "Stay updated" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.0 + index * 0.1, duration: 0.5 }}
+                    className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
                     style={{
-                      background: "linear-gradient(135deg, #8b5cf6, #3b82f6)",
-                      color: "white",
-                      boxShadow: "0 8px 25px rgba(139, 92, 246, 0.4)",
-                    }}
-                    whileHover={{
-                      scale: 1.05,
-                      boxShadow: "0 12px 35px rgba(139, 92, 246, 0.6)",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      window.open("https://insidegames022.com", "_blank")
+                      background: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(139, 92, 246, 0.1)",
+                      backdropFilter: "blur(10px)",
+                      border: `1px solid ${
+                        resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(139, 92, 246, 0.2)"
+                      }`,
                     }}
                   >
-                    🌐 Visit Website
-                  </motion.button>
+                    <div className="text-2xl mb-2">{item.icon}</div>
+                    <h3
+                      className={`font-bold text-xs mb-1 ${resolvedTheme === "dark" ? "text-white" : "text-gray-900"}`}
+                    >
+                      {item.title}
+                    </h3>
+                    <p className={`text-xs ${resolvedTheme === "dark" ? "text-white/70" : "text-gray-600"}`}>
+                      {item.desc}
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
 
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.6 }}
-                    transition={{ delay: 2.2, duration: 0.5 }}
-                    className="text-sm mt-6 text-center text-white/60"
+              {/* Compact Stats - 3 only */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4, duration: 0.6 }}
+                className="grid grid-cols-3 gap-4 mb-6"
+              >
+                {[
+                  { number: "50K+", label: "Gamers", icon: "👥" },
+                  { number: "1000+", label: "Games", icon: "🎮" },
+                  { number: "24/7", label: "Support", icon: "💬" },
+                ].map((stat, index) => (
+                  <motion.div
+                    key={index}
+                    className="text-center p-3 rounded-xl"
+                    style={{
+                      background: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(139, 92, 246, 0.08)",
+                      backdropFilter: "blur(10px)",
+                      border: `1px solid ${
+                        resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(139, 92, 246, 0.15)"
+                      }`,
+                    }}
+                    whileHover={{ scale: 1.05 }}
                   >
-                    Click anywhere to close • Click button to visit website
-                  </motion.p>
-                </motion.div>
-              </div>
+                    <div className="text-xl mb-1">{stat.icon}</div>
+                    <div
+                      className={`text-lg font-bold mb-1 ${resolvedTheme === "dark" ? "text-white" : "text-gray-900"}`}
+                    >
+                      {stat.number}
+                    </div>
+                    <div className={`text-xs ${resolvedTheme === "dark" ? "text-white/70" : "text-gray-600"}`}>
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* Action Buttons - Compact */}
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 1.8, duration: 0.6, ease: "easeOut" }}
+                className="flex flex-col sm:flex-row justify-center gap-3 mb-4"
+              >
+                <motion.button
+                  className="px-6 py-3 rounded-full font-bold text-base transition-all duration-300"
+                  style={{
+                    background: "linear-gradient(135deg, #8b5cf6, #3b82f6)",
+                    color: "white",
+                    boxShadow: "0 8px 25px rgba(139, 92, 246, 0.5)",
+                  }}
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 12px 35px rgba(139, 92, 246, 0.7)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    window.open("https://insidegames022.com", "_blank")
+                  }}
+                >
+                  🌐 Visit Website
+                </motion.button>
+
+                <motion.button
+                  className="px-6 py-3 rounded-full font-bold text-base transition-all duration-300"
+                  style={{
+                    background: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(139, 92, 246, 0.1)",
+                    color: resolvedTheme === "dark" ? "white" : "#8b5cf6",
+                    border: `2px solid ${resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.3)" : "#8b5cf6"}`,
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  👥 Join Community
+                </motion.button>
+              </motion.div>
+
+              {/* Close Instructions - Compact */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.6 }}
+                transition={{ delay: 2.2, duration: 0.5 }}
+                className={`text-xs text-center ${resolvedTheme === "dark" ? "text-white/60" : "text-gray-500"}`}
+              >
+                Click anywhere to close • Click buttons to interact
+              </motion.p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Illustrator Art LK Showcase Overlay - Simplified Dark Blur */}
+      {/* Illustrator Art LK Showcase Overlay - Compact Version */}
       <AnimatePresence>
         {showIllustratorArtShowcase && (
           <motion.div
@@ -843,172 +976,224 @@ export default function CodePlaygroundSimple() {
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed inset-0 z-50 flex items-center justify-center"
             style={{
-              background: "rgba(0, 0, 0, 0.85)",
-              backdropFilter: "blur(15px)",
+              background: resolvedTheme === "dark" ? "rgba(0, 0, 0, 0.95)" : "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(20px)",
             }}
             onClick={() => setShowIllustratorArtShowcase(false)}
           >
-            {/* Simple Content Container */}
+            {/* Compact Content Container */}
             <motion.div
-              className="relative z-10 max-w-4xl mx-auto px-6"
-              initial={{ opacity: 0, scale: 0.95 }}
+              className="relative z-10 max-w-5xl mx-auto px-6 text-center"
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              {/* Main Content */}
-              <div className="text-center">
-                <motion.h1
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-                  className="text-4xl sm:text-6xl md:text-7xl font-bold text-white mb-6"
-                  style={{
-                    textShadow: "0 0 30px rgba(255, 107, 107, 0.6)",
-                  }}
-                >
-                  Illustrator Art LK
-                </motion.h1>
+              {/* Art Icons Header - Reduced */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.6 }}
+                className="flex justify-center gap-3 mb-4"
+              >
+                {["🎨", "✏️", "🖌️", "🎭"].map((icon, index) => (
+                  <motion.div
+                    key={index}
+                    className="text-2xl sm:text-3xl"
+                    animate={{
+                      y: [0, -8, 0],
+                      rotate: [0, 10, -10, 0],
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      delay: index * 0.3,
+                      repeat: Number.POSITIVE_INFINITY,
+                      repeatType: "reverse",
+                    }}
+                  >
+                    {icon}
+                  </motion.div>
+                ))}
+              </motion.div>
 
-                <motion.p
-                  initial={{ y: 15, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
-                  className="text-xl sm:text-2xl md:text-3xl text-white/90 mb-8 font-light"
-                >
-                  Creative Design & Illustration Services
-                </motion.p>
+              {/* Main Title - Smaller */}
+              <motion.h1
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+                className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-3 ${
+                  resolvedTheme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+                style={{
+                  textShadow:
+                    resolvedTheme === "dark"
+                      ? "0 0 30px rgba(255, 107, 107, 0.8)"
+                      : "0 0 30px rgba(255, 107, 107, 0.6)",
+                }}
+              >
+                Illustrator Art LK
+              </motion.h1>
 
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
-                  className="h-1 mx-auto mb-10 rounded-full"
-                  style={{
-                    width: "250px",
-                    background: "linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1)",
-                    boxShadow: "0 0 15px rgba(255, 107, 107, 0.5)",
-                  }}
-                />
+              {/* Subtitle - Smaller */}
+              <motion.p
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
+                className={`text-lg sm:text-xl md:text-2xl mb-4 font-light ${
+                  resolvedTheme === "dark" ? "text-white/90" : "text-gray-800/90"
+                }`}
+              >
+                Creative Design & Illustration Services
+              </motion.p>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                  className="mb-10"
-                >
-                  <p className="text-white/80 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-                    Professional illustration and design services including logo design, digital art, branding packages,
-                    and custom illustrations. Transform your ideas into stunning visual masterpieces!
-                  </p>
+              {/* Animated Underline - Smaller */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.6, duration: 1, ease: "easeOut" }}
+                className="h-1 mx-auto mb-6 rounded-full"
+                style={{
+                  width: "250px",
+                  background: "linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1)",
+                  boxShadow:
+                    resolvedTheme === "dark"
+                      ? "0 0 15px rgba(255, 107, 107, 0.6)"
+                      : "0 0 15px rgba(255, 107, 107, 0.4)",
+                }}
+              />
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                    {[
-                      { icon: "🎨", label: "Logo Design" },
-                      { icon: "✏️", label: "Illustrations" },
-                      { icon: "🏷️", label: "Branding" },
-                      { icon: "🖼️", label: "Digital Art" },
-                    ].map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.0 + index * 0.1, duration: 0.5, ease: "easeOut" }}
-                        className="flex flex-col items-center gap-3 p-4 rounded-xl"
-                        style={{
-                          background: "rgba(255, 255, 255, 0.08)",
-                          backdropFilter: "blur(10px)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                        }}
-                      >
-                        <span className="text-3xl">{item.icon}</span>
-                        <span className="text-white text-sm font-medium">{item.label}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-6 mb-8">
-                    {[
-                      { number: "250+", label: "Artworks", icon: "🎨" },
-                      { number: "100+", label: "Happy Clients", icon: "😊" },
-                      { number: "4.9★", label: "Rating", icon: "⭐" },
-                    ].map((stat, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.4 + index * 0.1, duration: 0.5, ease: "easeOut" }}
-                        className="text-center p-4 rounded-xl"
-                        style={{
-                          background: "rgba(255, 255, 255, 0.08)",
-                          backdropFilter: "blur(10px)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                        }}
-                      >
-                        <div className="text-2xl mb-2">{stat.icon}</div>
-                        <div className="text-xl font-bold text-white mb-1">{stat.number}</div>
-                        <div className="text-sm text-white/70">{stat.label}</div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.8, duration: 0.6, ease: "easeOut" }}
-                  className="flex justify-center gap-4 mb-10"
-                >
-                  {["🎨", "✏️", "🖌️", "🎭"].map((icon, index) => (
-                    <motion.div
-                      key={index}
-                      className="text-3xl sm:text-4xl cursor-pointer"
-                      whileHover={{
-                        scale: 1.2,
-                        transition: { duration: 0.3 },
-                      }}
-                    >
-                      {icon}
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
-                  className="text-center"
-                >
-                  <motion.button
-                    className="px-8 py-3 rounded-full font-bold text-lg transition-all duration-300"
+              {/* Compact Service Cards - 4 only */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
+              >
+                {[
+                  { icon: "🎨", title: "Logo Design", price: "From $50" },
+                  { icon: "✏️", title: "Illustrations", price: "From $80" },
+                  { icon: "🏷️", title: "Branding", price: "From $200" },
+                  { icon: "🖼️", title: "Digital Art", price: "From $60" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.0 + index * 0.1, duration: 0.5 }}
+                    className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
                     style={{
-                      background: "linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1)",
-                      color: "white",
-                      boxShadow: "0 8px 25px rgba(255, 107, 107, 0.4)",
-                    }}
-                    whileHover={{
-                      scale: 1.05,
-                      boxShadow: "0 12px 35px rgba(255, 107, 107, 0.6)",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      window.open("https://illustratorart.lk", "_blank")
+                      background: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 107, 107, 0.1)",
+                      backdropFilter: "blur(10px)",
+                      border: `1px solid ${
+                        resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 107, 107, 0.2)"
+                      }`,
                     }}
                   >
-                    🎨 Visit Portfolio
-                  </motion.button>
+                    <div className="text-2xl mb-2">{item.icon}</div>
+                    <h3
+                      className={`font-bold text-xs mb-1 ${resolvedTheme === "dark" ? "text-white" : "text-gray-900"}`}
+                    >
+                      {item.title}
+                    </h3>
+                    <p
+                      className={`text-xs font-semibold ${
+                        resolvedTheme === "dark" ? "text-green-400" : "text-green-600"
+                      }`}
+                    >
+                      {item.price}
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
 
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.6 }}
-                    transition={{ delay: 2.4, duration: 0.5 }}
-                    className="text-sm mt-6 text-center text-white/60"
+              {/* Compact Stats - 4 only */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4, duration: 0.6 }}
+                className="grid grid-cols-4 gap-3 mb-6"
+              >
+                {[
+                  { number: "500+", label: "Artworks", icon: "🎨" },
+                  { number: "200+", label: "Clients", icon: "😊" },
+                  { number: "4.9★", label: "Rating", icon: "⭐" },
+                  { number: "24h", label: "Delivery", icon: "⚡" },
+                ].map((stat, index) => (
+                  <motion.div
+                    key={index}
+                    className="text-center p-3 rounded-xl"
+                    style={{
+                      background: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 107, 107, 0.08)",
+                      backdropFilter: "blur(10px)",
+                      border: `1px solid ${
+                        resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(255, 107, 107, 0.15)"
+                      }`,
+                    }}
+                    whileHover={{ scale: 1.05 }}
                   >
-                    Click anywhere to close • Click button to visit portfolio
-                  </motion.p>
-                </motion.div>
-              </div>
+                    <div className="text-lg mb-1">{stat.icon}</div>
+                    <div
+                      className={`text-sm font-bold mb-1 ${resolvedTheme === "dark" ? "text-white" : "text-gray-900"}`}
+                    >
+                      {stat.number}
+                    </div>
+                    <div className={`text-xs ${resolvedTheme === "dark" ? "text-white/70" : "text-gray-600"}`}>
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* Action Buttons - Compact */}
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 1.8, duration: 0.6, ease: "easeOut" }}
+                className="flex flex-col sm:flex-row justify-center gap-3 mb-4"
+              >
+                <motion.button
+                  className="px-6 py-3 rounded-full font-bold text-base transition-all duration-300"
+                  style={{
+                    background: "linear-gradient(135deg, #ff6b6b, #4ecdc4)",
+                    color: "white",
+                    boxShadow: "0 8px 25px rgba(255, 107, 107, 0.5)",
+                  }}
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 12px 35px rgba(255, 107, 107, 0.7)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    window.open("https://illustratorart.lk", "_blank")
+                  }}
+                >
+                  🎨 Visit Portfolio
+                </motion.button>
+
+                <motion.button
+                  className="px-6 py-3 rounded-full font-bold text-base transition-all duration-300"
+                  style={{
+                    background: resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 107, 107, 0.1)",
+                    color: resolvedTheme === "dark" ? "white" : "#ff6b6b",
+                    border: `2px solid ${resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.3)" : "#ff6b6b"}`,
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  📞 Get Quote
+                </motion.button>
+              </motion.div>
+
+              {/* Close Instructions - Compact */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.6 }}
+                transition={{ delay: 2.2, duration: 0.5 }}
+                className={`text-xs text-center ${resolvedTheme === "dark" ? "text-white/60" : "text-gray-500"}`}
+              >
+                Click anywhere to close • Click buttons to interact
+              </motion.p>
             </motion.div>
           </motion.div>
         )}
