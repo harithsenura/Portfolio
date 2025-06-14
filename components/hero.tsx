@@ -51,7 +51,7 @@ export default function Hero() {
           >
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white/20 shadow-xl relative mx-auto">
               <Image
-                src="/PDP.jpeg?height=160&width=160"
+                src="/dpp.jpg?height=160&width=160"
                 alt="Your Name"
                 width={160}
                 height={160}
@@ -86,7 +86,7 @@ export default function Hero() {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="text-4xl md:text-6xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300"
           >
-            Your Name
+            I am Harith Divarathna
           </motion.h1>
 
           <motion.h2

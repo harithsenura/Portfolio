@@ -3,7 +3,20 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { Code, Play, RefreshCw, Copy, Check, Laptop, Server, Database, ChevronRight, ChevronLeft } from "lucide-react"
+import {
+  Code,
+  Play,
+  RefreshCw,
+  Copy,
+  Check,
+  Laptop,
+  Server,
+  Database,
+  ChevronRight,
+  ChevronLeft,
+  Maximize2,
+  Minimize2,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { GlassyIcon } from "@/components/ui/glassy-icon"
 import { useTheme } from "next-themes"
@@ -328,24 +341,21 @@ export default function CodePlaygroundSimple() {
   const [showIllustratorArtShowcase, setShowIllustratorArtShowcase] = useState(false)
   const { resolvedTheme } = useTheme()
   const [isMobileView, setIsMobileView] = useState(false)
-  const [isSmallMobile, setIsSmallMobile] = useState(false) // For iPhone-sized devices
+  const [isSmallMobile, setIsSmallMobile] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   // Check if we're on mobile and specifically iPhone 14 size
   useEffect(() => {
     const checkMobile = () => {
       const width = window.innerWidth
+      const height = window.innerHeight
       setIsMobileView(width < 768)
-      setIsSmallMobile(width <= 390) // iPhone 14 width is approximately 390px
+      setIsSmallMobile(width <= 390 || height <= 667) // Include height check for better detection
     }
 
-    // Initial check
     checkMobile()
-
-    // Add event listener
     window.addEventListener("resize", checkMobile)
-
-    // Cleanup
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
@@ -401,8 +411,12 @@ export default function CodePlaygroundSimple() {
     setActiveSnippet(codeSnippets[prevIndex])
   }
 
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen)
+  }
+
   return (
-    <section id="code-playground" className="py-20 relative overflow-hidden bg-gray-50/50 dark:bg-gray-900/20">
+    <section id="code-playground" className="py-8 relative overflow-hidden bg-gray-50/50 dark:bg-gray-900/20">
       {/* Background elements */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
@@ -415,10 +429,10 @@ export default function CodePlaygroundSimple() {
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-4 sm:mb-8"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Code Playground</h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-6 sm:mb-8 rounded-full"></div>
+          <h2 className="text-2xl md:text-4xl font-bold mb-2">Code Playground</h2>
+          <div className="w-16 h-1 bg-primary mx-auto mb-4 sm:mb-6 rounded-full"></div>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-sm sm:text-base">
             Explore and interact with code samples showcasing my development skills
           </p>
@@ -426,25 +440,45 @@ export default function CodePlaygroundSimple() {
 
         {/* Mobile Snippet Selector */}
         {isMobileView && (
-          <div className="mb-4 sm:mb-6">
-            <div className="code-playground-mobile-selector">
-              <button onClick={prevSnippet} className="code-nav-button">
-                <ChevronLeft size={isSmallMobile ? 16 : 20} />
-              </button>
+          <div className="mb-2 sm:mb-4 px-0">
+            <div className="code-playground-mobile-container">
+              <div className="code-playground-mobile-selector-inner">
+                <button onClick={prevSnippet} className="code-nav-button">
+                  <ChevronLeft size={isSmallMobile ? 16 : 20} />
+                </button>
 
-              <div className="flex items-center">
-                <GlassyIcon
-                  icon={activeSnippet.icon}
-                  size={isSmallMobile ? 14 : 16}
-                  color={activeSnippet.color as any}
-                  className="p-1.5 sm:p-2 mr-1.5 sm:mr-2"
-                />
-                <span className="font-medium text-xs sm:text-sm">{activeSnippet.name}</span>
+                <div className="flex items-center">
+                  <GlassyIcon
+                    icon={activeSnippet.icon}
+                    size={isSmallMobile ? 14 : 16}
+                    color={activeSnippet.color as any}
+                    className="p-1.5 sm:p-2 mr-1.5 sm:mr-2"
+                  />
+                  <span className="font-medium text-xs sm:text-sm">{activeSnippet.name}</span>
+                </div>
+
+                <button onClick={nextSnippet} className="code-nav-button">
+                  <ChevronRight size={isSmallMobile ? 16 : 20} />
+                </button>
               </div>
 
-              <button onClick={nextSnippet} className="code-nav-button">
-                <ChevronRight size={isSmallMobile ? 16 : 20} />
-              </button>
+              {/* Mobile snippet dots indicator */}
+              <div className="flex justify-center mt-2 space-x-1.5">
+                {codeSnippets.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setCurrentSnippetIndex(index)
+                      setActiveSnippet(codeSnippets[index])
+                    }}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === currentSnippetIndex
+                        ? "bg-primary scale-125"
+                        : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -486,739 +520,495 @@ export default function CodePlaygroundSimple() {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className={isMobileView ? "" : "lg:col-span-4"}
+            className={isMobileView ? "px-0" : "lg:col-span-4"}
           >
-            <div className="code-playground-editor">
-              {/* Editor Header */}
-              <div className="code-playground-header">
-                <div className="flex items-center">
-                  <GlassyIcon
-                    icon={Code}
-                    size={isSmallMobile ? 14 : 16}
-                    color="primary"
-                    className={`p-1.5 mr-1.5 ${isSmallMobile ? "hidden" : "hidden sm:flex"}`}
-                  />
-                  <span className="font-medium text-xs">{activeSnippet.name}</span>
-                  <span
-                    className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary ${isSmallMobile ? "hidden" : "hidden sm:inline-block"}`}
-                  >
-                    {activeSnippet.language}
-                  </span>
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    size="sm"
-                    variant="glass"
-                    className="code-playground-button h-7 px-1.5 text-[10px] sm:text-xs"
-                    onClick={() => setIsEditing(!isEditing)}
-                  >
-                    {isEditing ? "View" : "Edit"}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="glass"
-                    className="code-playground-button h-7 px-1.5 text-[10px] sm:text-xs"
-                    onClick={handleRun}
-                    disabled={isRunning}
-                  >
-                    {isRunning ? <RefreshCw className="h-3 w-3" /> : <Play className="h-3 w-3" />}
-                    <span className={isSmallMobile ? "hidden" : "hidden sm:inline ml-1"}>Run</span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="glass"
-                    className="code-playground-button h-7 px-1.5 text-[10px] sm:text-xs"
-                    onClick={handleCopy}
-                  >
-                    {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                    <span className={isSmallMobile ? "hidden" : "hidden sm:inline ml-1"}>
-                      {copied ? "Copied!" : "Copy"}
+            <div
+              className={`code-playground-editor-container ${isFullscreen && isMobileView ? "mobile-fullscreen" : ""}`}
+            >
+              <div className="code-playground-editor-inner">
+                {/* Editor Header */}
+                <div className="code-playground-header">
+                  <div className="flex items-center">
+                    <GlassyIcon
+                      icon={Code}
+                      size={isSmallMobile ? 14 : 16}
+                      color="primary"
+                      className={`p-1.5 mr-1.5 ${isSmallMobile ? "hidden" : "hidden sm:flex"}`}
+                    />
+                    <span className="font-medium text-xs">{activeSnippet.name}</span>
+                    <span
+                      className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary ${isSmallMobile ? "hidden" : "hidden sm:inline-block"}`}
+                    >
+                      {activeSnippet.language}
                     </span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="glass"
-                    className="code-playground-button h-7 px-1.5 text-[10px] sm:text-xs"
-                    onClick={handleReset}
-                  >
-                    <RefreshCw className="h-3 w-3" />
-                    <span className={isSmallMobile ? "hidden" : "hidden sm:inline ml-1"}>Reset</span>
-                  </Button>
+                  </div>
+                  <div className="flex gap-1">
+                    {/* Mobile fullscreen toggle */}
+                    {isMobileView && (
+                      <Button
+                        size="sm"
+                        variant="glass"
+                        className="code-playground-button h-6 px-1 text-[9px]"
+                        onClick={toggleFullscreen}
+                      >
+                        {isFullscreen ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="glass"
+                      className="code-playground-button h-6 px-1 text-[9px]"
+                      onClick={() => setIsEditing(!isEditing)}
+                    >
+                      {isEditing ? "View" : "Edit"}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="glass"
+                      className="code-playground-button h-6 px-1 text-[9px]"
+                      onClick={handleRun}
+                      disabled={isRunning}
+                    >
+                      {isRunning ? <RefreshCw className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="glass"
+                      className="code-playground-button h-6 px-1 text-[9px]"
+                      onClick={handleCopy}
+                    >
+                      {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="glass"
+                      className="code-playground-button h-6 px-1 text-[9px]"
+                      onClick={handleReset}
+                    >
+                      <RefreshCw className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Code Editor Area */}
-              <div className="code-playground-content">
-                {isEditing ? (
-                  <textarea
-                    value={userCode}
-                    onChange={(e) => setUserCode(e.target.value)}
-                    className="code-editor"
-                    spellCheck="false"
-                    style={{
-                      height: isSmallMobile ? "180px" : isMobileView ? "200px" : "300px",
-                      fontSize: isSmallMobile ? "11px" : isMobileView ? "12px" : "14px",
-                    }}
-                  />
-                ) : (
-                  <div
-                    className="syntax-highlighter-container"
-                    style={{
-                      height: isSmallMobile ? "180px" : isMobileView ? "200px" : "300px",
-                      overflow: "auto",
-                      padding: isSmallMobile ? "0.5rem" : "1rem",
-                      fontFamily: "monospace",
-                      fontSize: isSmallMobile ? "11px" : isMobileView ? "12px" : "14px",
-                      lineHeight: 1.5,
-                      backgroundColor: resolvedTheme === "dark" ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.3)",
-                      color: resolvedTheme === "dark" ? "#e2e8f0" : "#1a202c",
-                    }}
-                  >
-                    <pre
-                      dangerouslySetInnerHTML={{
-                        __html: highlightCode(userCode, activeSnippet.language),
+                {/* Code Editor Area */}
+                <div className="code-playground-content">
+                  {isEditing ? (
+                    <textarea
+                      value={userCode}
+                      onChange={(e) => setUserCode(e.target.value)}
+                      className="code-editor"
+                      spellCheck="false"
+                      style={{
+                        height:
+                          isFullscreen && isMobileView
+                            ? "calc(100vh - 80px)"
+                            : isSmallMobile
+                              ? "120px" // වැඩි කරන්න 100px වෙනුවට
+                              : isMobileView
+                                ? "150px" // වැඩි කරන්න 120px වෙනුවට
+                                : "400px", // වැඩි කරන්න 300px වෙනුවට
+                        fontSize: isSmallMobile ? "10px" : isMobileView ? "11px" : "14px",
                       }}
                     />
+                  ) : (
+                    <div
+                      className="syntax-highlighter-container"
+                      style={{
+                        height:
+                          isFullscreen && isMobileView
+                            ? "calc(100vh - 80px)"
+                            : isSmallMobile
+                              ? "120px" // Ultra compact for small screens
+                              : isMobileView
+                                ? "150px" // Compact for mobile
+                                : "400px",
+                        fontSize: isSmallMobile ? "10px" : isMobileView ? "11px" : "14px",
+                        overflow: "auto",
+                        padding: isSmallMobile ? "0.25rem" : isMobileView ? "0.5rem" : "1rem",
+                        fontFamily: "monospace",
+                        lineHeight: 1.2,
+                        backgroundColor: resolvedTheme === "dark" ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.3)",
+                        color: resolvedTheme === "dark" ? "#e2e8f0" : "#1a202c",
+                      }}
+                    >
+                      <pre
+                        dangerouslySetInnerHTML={{
+                          __html: highlightCode(userCode, activeSnippet.language),
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Output Area - Only show if not mobile or if there's space */}
+                {showOutput && !isMobileView && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="code-playground-output"
+                  >
+                    <div className="flex items-center mb-1 sm:mb-2">
+                      <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-green-500 mr-1.5 sm:mr-2"></div>
+                      <span className="text-xs sm:text-sm font-medium">Output</span>
+                    </div>
+                    <div className="code-output text-[10px] sm:text-xs p-2 sm:p-3">
+                      {activeSnippet.output === "inside-games-animation" ? (
+                        <div className="text-center">Inside Games 022 showcase is running...</div>
+                      ) : activeSnippet.output === "illustrator-art-showcase" ? (
+                        <div className="text-center">Illustrator Art LK showcase is running...</div>
+                      ) : (
+                        activeSnippet.output
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Mobile Code Description - Ultra compact */}
+                {isMobileView && (
+                  <div className="p-2 border-t border-white/10 dark:border-gray-700/20">
+                    <p className="text-[10px] text-gray-600 dark:text-gray-400 leading-tight">
+                      {activeSnippet.description.substring(0, 80)}...
+                    </p>
                   </div>
                 )}
               </div>
-
-              {/* Output Area */}
-              {showOutput && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="code-playground-output"
-                >
-                  <div className="flex items-center mb-1 sm:mb-2">
-                    <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-green-500 mr-1.5 sm:mr-2"></div>
-                    <span className="text-xs sm:text-sm font-medium">Output</span>
-                  </div>
-                  <div className="code-output text-[10px] sm:text-xs p-2 sm:p-3">
-                    {activeSnippet.output === "inside-games-animation" ? (
-                      <div className="text-center">Inside Games 022 showcase is running...</div>
-                    ) : activeSnippet.output === "illustrator-art-showcase" ? (
-                      <div className="text-center">Illustrator Art LK showcase is running...</div>
-                    ) : (
-                      activeSnippet.output
-                    )}
-                  </div>
-                </motion.div>
-              )}
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Inside Games 022 Animation Overlay */}
+      {/* Inside Games 022 Animation Overlay - Simplified Dark Blur */}
       <AnimatePresence>
         {showInsideGamesAnimation && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed inset-0 z-50 flex items-center justify-center"
             style={{
-              background:
-                "linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 30, 0.98) 50%, rgba(0, 0, 0, 0.95) 100%)",
-              backdropFilter: "blur(20px)",
+              background: "rgba(0, 0, 0, 0.85)",
+              backdropFilter: "blur(15px)",
             }}
             onClick={() => setShowInsideGamesAnimation(false)}
           >
-            {/* Animated Background Elements */}
-            <div className="absolute inset-0 overflow-hidden">
-              {/* Floating Glass Orbs */}
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute rounded-full"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
-                    backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    width: `${100 + i * 50}px`,
-                    height: `${100 + i * 50}px`,
-                  }}
-                  initial={{
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
-                    scale: 0,
-                    opacity: 0,
-                  }}
-                  animate={{
-                    x: [
-                      Math.random() * window.innerWidth,
-                      Math.random() * window.innerWidth,
-                      Math.random() * window.innerWidth,
-                    ],
-                    y: [
-                      Math.random() * window.innerHeight,
-                      Math.random() * window.innerHeight,
-                      Math.random() * window.innerHeight,
-                    ],
-                    scale: [0, 1, 0.8, 1],
-                    opacity: [0, 0.3, 0.1, 0.3],
-                  }}
-                  transition={{
-                    duration: 15 + i * 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "easeInOut",
-                  }}
-                />
-              ))}
-
-              {/* Grid Pattern */}
-              <div
-                className="absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage: `
-              linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
-            `,
-                  backgroundSize: "50px 50px",
-                }}
-              />
-            </div>
-
-            {/* Main Content Container */}
+            {/* Simple Content Container */}
             <motion.div
-              className="relative z-10 max-w-5xl mx-auto px-4"
-              initial={{ opacity: 0, scale: 0.9 }}
+              className="relative z-10 max-w-4xl mx-auto px-6"
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              {/* Glass Container */}
-              <motion.div
-                className="relative overflow-hidden rounded-3xl p-8 sm:p-12"
-                style={{
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
-                  backdropFilter: "blur(30px)",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
-                  boxShadow: "0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
-                }}
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-              >
-                {/* Animated Border Glow */}
-                <motion.div
-                  className="absolute inset-0 rounded-3xl"
+              {/* Main Content */}
+              <div className="text-center">
+                <motion.h1
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+                  className="text-4xl sm:text-6xl md:text-7xl font-bold text-white mb-6"
                   style={{
-                    background:
-                      "linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.3), transparent, rgba(59, 130, 246, 0.3), transparent)",
-                    backgroundSize: "400% 400%",
+                    textShadow: "0 0 30px rgba(139, 92, 246, 0.6)",
                   }}
-                  animate={{
-                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                  }}
-                  transition={{
-                    duration: 8,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
+                >
+                  Inside Games 022
+                </motion.h1>
+
+                <motion.p
+                  initial={{ y: 15, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
+                  className="text-xl sm:text-2xl md:text-3xl text-white/90 mb-8 font-light"
+                >
+                  Your Ultimate Gaming Destination
+                </motion.p>
+
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
+                  className="h-1 mx-auto mb-10 rounded-full"
+                  style={{
+                    width: "200px",
+                    background: "linear-gradient(90deg, #8b5cf6, #3b82f6)",
+                    boxShadow: "0 0 15px rgba(139, 92, 246, 0.5)",
                   }}
                 />
 
-                {/* Content */}
-                <div className="relative z-10">
-                  <motion.h1
-                    initial={{ y: 30, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
-                    className="text-4xl sm:text-6xl md:text-8xl font-bold text-white mb-4 text-center"
-                    style={{
-                      textShadow: "0 0 40px rgba(139, 92, 246, 0.8), 0 0 80px rgba(59, 130, 246, 0.4)",
-                      background: "linear-gradient(135deg, #ffffff, #e0e7ff, #c7d2fe)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    Inside Games 022
-                  </motion.h1>
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+                  className="mb-10"
+                >
+                  <p className="text-white/80 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+                    Discover the latest games, reviews, news, and gaming community. Join thousands of gamers in the
+                    ultimate gaming experience!
+                  </p>
 
-                  <motion.p
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
-                    className="text-xl sm:text-2xl md:text-3xl text-white/90 mb-8 text-center font-light"
-                    style={{ textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)" }}
-                  >
-                    Your Ultimate Gaming Destination
-                  </motion.p>
-
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: 1.2, duration: 1, ease: "easeOut" }}
-                    className="h-1 mx-auto mb-8 rounded-full"
-                    style={{
-                      width: "200px",
-                      background: "linear-gradient(90deg, #8b5cf6, #3b82f6, #8b5cf6)",
-                      boxShadow: "0 0 20px rgba(139, 92, 246, 0.8)",
-                    }}
-                  />
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
-                    className="text-center mb-8"
-                  >
-                    <p className="text-white/80 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-                      Discover the latest games, reviews, news, and gaming community. Join thousands of gamers in the
-                      ultimate gaming experience with exclusive content, tournaments, and more!
-                    </p>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                      {[
-                        { icon: "🎮", label: "Latest Games", delay: 1.6 },
-                        { icon: "🏆", label: "Tournaments", delay: 1.8 },
-                        { icon: "👥", label: "Community", delay: 2.0 },
-                        { icon: "📰", label: "Gaming News", delay: 2.2 },
-                      ].map((item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          transition={{ delay: item.delay, duration: 0.6, ease: "easeOut" }}
-                          className="flex flex-col items-center gap-2 p-4 rounded-2xl"
-                          style={{
-                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
-                            backdropFilter: "blur(10px)",
-                            border: "1px solid rgba(255, 255, 255, 0.1)",
-                          }}
-                          whileHover={{
-                            scale: 1.05,
-                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))",
-                          }}
-                        >
-                          <motion.span
-                            className="text-3xl"
-                            animate={{
-                              rotate: [0, 10, -10, 0],
-                            }}
-                            transition={{
-                              duration: 2,
-                              delay: item.delay + 0.5,
-                              repeat: Number.POSITIVE_INFINITY,
-                              repeatType: "reverse",
-                            }}
-                          >
-                            {item.icon}
-                          </motion.span>
-                          <span className="text-white text-sm font-medium">{item.label}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 2.4, duration: 0.6, ease: "easeOut" }}
-                    className="flex justify-center gap-6 mb-8"
-                  >
-                    {["🎮", "🕹️", "🎯", "🏆", "⚡", "🎪"].map((icon, index) => (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                    {[
+                      { icon: "🎮", label: "Latest Games" },
+                      { icon: "🏆", label: "Tournaments" },
+                      { icon: "👥", label: "Community" },
+                      { icon: "📰", label: "Gaming News" },
+                    ].map((item, index) => (
                       <motion.div
                         key={index}
-                        className="text-4xl sm:text-5xl cursor-pointer"
-                        animate={{
-                          y: [0, -15, 0],
-                          rotate: [0, 5, -5, 0],
-                          scale: [1, 1.1, 1],
-                        }}
-                        transition={{
-                          duration: 3,
-                          delay: index * 0.3,
-                          repeat: Number.POSITIVE_INFINITY,
-                          repeatType: "reverse",
-                          ease: "easeInOut",
-                        }}
-                        whileHover={{
-                          scale: 1.3,
-                          rotate: 360,
-                          transition: { duration: 0.5 },
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1.0 + index * 0.1, duration: 0.5, ease: "easeOut" }}
+                        className="flex flex-col items-center gap-3 p-4 rounded-xl"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.08)",
+                          backdropFilter: "blur(10px)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
                         }}
                       >
-                        {icon}
+                        <span className="text-3xl">{item.icon}</span>
+                        <span className="text-white text-sm font-medium">{item.label}</span>
                       </motion.div>
                     ))}
-                  </motion.div>
+                  </div>
+                </motion.div>
 
-                  <motion.div
-                    initial={{ y: 30, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 2.8, duration: 0.6, ease: "easeOut" }}
-                    className="text-center"
-                  >
-                    <motion.button
-                      className="relative overflow-hidden px-10 py-4 rounded-full font-bold text-lg transition-all duration-300"
-                      style={{
-                        background: "linear-gradient(135deg, #8b5cf6, #3b82f6)",
-                        color: "white",
-                        boxShadow: "0 10px 30px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)",
-                      }}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.6, duration: 0.6, ease: "easeOut" }}
+                  className="flex justify-center gap-4 mb-10"
+                >
+                  {["🎮", "🕹️", "🎯", "🏆"].map((icon, index) => (
+                    <motion.div
+                      key={index}
+                      className="text-3xl sm:text-4xl cursor-pointer"
                       whileHover={{
-                        scale: 1.05,
-                        boxShadow: "0 15px 40px rgba(139, 92, 246, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2)",
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        window.open("https://insidegames022.com", "_blank")
+                        scale: 1.2,
+                        transition: { duration: 0.3 },
                       }}
                     >
-                      {/* Button Shine Effect */}
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                        initial={{ x: "-100%" }}
-                        animate={{ x: "100%" }}
-                        transition={{
-                          duration: 2,
-                          repeat: Number.POSITIVE_INFINITY,
-                          repeatDelay: 3,
-                        }}
-                      />
-                      <span className="relative z-10">🌐 Visit Website</span>
-                    </motion.button>
+                      {icon}
+                    </motion.div>
+                  ))}
+                </motion.div>
 
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 0.7 }}
-                      transition={{ delay: 3.2, duration: 0.5 }}
-                      className="text-xs sm:text-sm mt-6 text-center text-white/60"
-                    >
-                      Click anywhere to close • Click button to visit website
-                    </motion.p>
-                  </motion.div>
-                </div>
-              </motion.div>
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 1.8, duration: 0.6, ease: "easeOut" }}
+                  className="text-center"
+                >
+                  <motion.button
+                    className="px-8 py-3 rounded-full font-bold text-lg transition-all duration-300"
+                    style={{
+                      background: "linear-gradient(135deg, #8b5cf6, #3b82f6)",
+                      color: "white",
+                      boxShadow: "0 8px 25px rgba(139, 92, 246, 0.4)",
+                    }}
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 12px 35px rgba(139, 92, 246, 0.6)",
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      window.open("https://insidegames022.com", "_blank")
+                    }}
+                  >
+                    🌐 Visit Website
+                  </motion.button>
+
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.6 }}
+                    transition={{ delay: 2.2, duration: 0.5 }}
+                    className="text-sm mt-6 text-center text-white/60"
+                  >
+                    Click anywhere to close • Click button to visit website
+                  </motion.p>
+                </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Illustrator Art LK Showcase Overlay */}
+      {/* Illustrator Art LK Showcase Overlay - Simplified Dark Blur */}
       <AnimatePresence>
         {showIllustratorArtShowcase && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed inset-0 z-50 flex items-center justify-center"
             style={{
-              background:
-                "linear-gradient(135deg, rgba(15, 15, 25, 0.95) 0%, rgba(30, 20, 40, 0.98) 50%, rgba(15, 15, 25, 0.95) 100%)",
-              backdropFilter: "blur(20px)",
+              background: "rgba(0, 0, 0, 0.85)",
+              backdropFilter: "blur(15px)",
             }}
             onClick={() => setShowIllustratorArtShowcase(false)}
           >
-            {/* Animated Background Elements */}
-            <div className="absolute inset-0 overflow-hidden">
-              {/* Floating Art Elements */}
-              {[...Array(8)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute"
-                  style={{
-                    background: `linear-gradient(135deg, rgba(${255 - i * 20}, ${100 + i * 20}, ${200 + i * 10}, 0.1), rgba(${200 + i * 10}, ${150 + i * 15}, ${255 - i * 15}, 0.05))`,
-                    backdropFilter: "blur(8px)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    borderRadius: i % 2 === 0 ? "50%" : "20px",
-                    width: `${80 + i * 30}px`,
-                    height: `${80 + i * 30}px`,
-                  }}
-                  initial={{
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
-                    scale: 0,
-                    opacity: 0,
-                    rotate: 0,
-                  }}
-                  animate={{
-                    x: [
-                      Math.random() * window.innerWidth,
-                      Math.random() * window.innerWidth,
-                      Math.random() * window.innerWidth,
-                    ],
-                    y: [
-                      Math.random() * window.innerHeight,
-                      Math.random() * window.innerHeight,
-                      Math.random() * window.innerHeight,
-                    ],
-                    scale: [0, 1, 0.7, 1],
-                    opacity: [0, 0.4, 0.1, 0.4],
-                    rotate: [0, 180, 360],
-                  }}
-                  transition={{
-                    duration: 12 + i * 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "easeInOut",
-                  }}
-                />
-              ))}
-
-              {/* Creative Grid Pattern */}
-              <div
-                className="absolute inset-0 opacity-5"
-                style={{
-                  backgroundImage: `
-              radial-gradient(circle at 25% 25%, rgba(255, 100, 200, 0.3) 2px, transparent 2px),
-              radial-gradient(circle at 75% 75%, rgba(100, 200, 255, 0.3) 2px, transparent 2px)
-            `,
-                  backgroundSize: "60px 60px",
-                }}
-              />
-            </div>
-
-            {/* Main Content Container */}
+            {/* Simple Content Container */}
             <motion.div
-              className="relative z-10 max-w-6xl mx-auto px-4"
-              initial={{ opacity: 0, scale: 0.9 }}
+              className="relative z-10 max-w-4xl mx-auto px-6"
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              {/* Glass Container */}
-              <motion.div
-                className="relative overflow-hidden rounded-3xl p-6 sm:p-10"
-                style={{
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06))",
-                  backdropFilter: "blur(25px)",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
-                  boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
-                }}
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-              >
-                {/* Animated Border Glow */}
-                <motion.div
-                  className="absolute inset-0 rounded-3xl"
+              {/* Main Content */}
+              <div className="text-center">
+                <motion.h1
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+                  className="text-4xl sm:text-6xl md:text-7xl font-bold text-white mb-6"
                   style={{
-                    background:
-                      "linear-gradient(45deg, transparent, rgba(255, 100, 200, 0.3), transparent, rgba(100, 200, 255, 0.3), transparent, rgba(200, 100, 255, 0.3), transparent)",
-                    backgroundSize: "600% 600%",
+                    textShadow: "0 0 30px rgba(255, 107, 107, 0.6)",
                   }}
-                  animate={{
-                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                  }}
-                  transition={{
-                    duration: 10,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
+                >
+                  Illustrator Art LK
+                </motion.h1>
+
+                <motion.p
+                  initial={{ y: 15, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
+                  className="text-xl sm:text-2xl md:text-3xl text-white/90 mb-8 font-light"
+                >
+                  Creative Design & Illustration Services
+                </motion.p>
+
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
+                  className="h-1 mx-auto mb-10 rounded-full"
+                  style={{
+                    width: "250px",
+                    background: "linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1)",
+                    boxShadow: "0 0 15px rgba(255, 107, 107, 0.5)",
                   }}
                 />
 
-                {/* Content */}
-                <div className="relative z-10">
-                  <motion.h1
-                    initial={{ y: 30, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
-                    className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-4 text-center"
-                    style={{
-                      textShadow: "0 0 30px rgba(255, 100, 200, 0.8), 0 0 60px rgba(100, 200, 255, 0.4)",
-                      background: "linear-gradient(135deg, #ffffff, #ffeaa7, #fab1a0)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    Illustrator Art LK
-                  </motion.h1>
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+                  className="mb-10"
+                >
+                  <p className="text-white/80 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+                    Professional illustration and design services including logo design, digital art, branding packages,
+                    and custom illustrations. Transform your ideas into stunning visual masterpieces!
+                  </p>
 
-                  <motion.p
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
-                    className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 text-center font-light"
-                    style={{ textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)" }}
-                  >
-                    Creative Design & Illustration Services
-                  </motion.p>
-
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: 1.2, duration: 1, ease: "easeOut" }}
-                    className="h-1 mx-auto mb-8 rounded-full"
-                    style={{
-                      width: "250px",
-                      background: "linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4)",
-                      boxShadow: "0 0 20px rgba(255, 107, 107, 0.6)",
-                    }}
-                  />
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
-                    className="text-center mb-8"
-                  >
-                    <p className="text-white/80 text-sm sm:text-base md:text-lg max-w-3xl mx-auto mb-8 leading-relaxed">
-                      Professional illustration and design services including logo design, digital art, branding
-                      packages, and custom illustrations. Transform your ideas into stunning visual masterpieces with
-                      our creative expertise!
-                    </p>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                      {[
-                        { icon: "🎨", label: "Logo Design", delay: 1.6, color: "from-red-400 to-pink-400" },
-                        { icon: "✏️", label: "Illustrations", delay: 1.8, color: "from-blue-400 to-cyan-400" },
-                        { icon: "🏷️", label: "Branding", delay: 2.0, color: "from-green-400 to-teal-400" },
-                        { icon: "🖼️", label: "Digital Art", delay: 2.2, color: "from-purple-400 to-indigo-400" },
-                      ].map((item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          transition={{ delay: item.delay, duration: 0.6, ease: "easeOut" }}
-                          className="flex flex-col items-center gap-3 p-4 rounded-2xl"
-                          style={{
-                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06))",
-                            backdropFilter: "blur(10px)",
-                            border: "1px solid rgba(255, 255, 255, 0.1)",
-                          }}
-                          whileHover={{
-                            scale: 1.05,
-                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.09))",
-                          }}
-                        >
-                          <motion.div
-                            className={`p-3 rounded-full bg-gradient-to-r ${item.color}`}
-                            animate={{
-                              rotate: [0, 10, -10, 0],
-                              scale: [1, 1.1, 1],
-                            }}
-                            transition={{
-                              duration: 3,
-                              delay: item.delay + 0.5,
-                              repeat: Number.POSITIVE_INFINITY,
-                              repeatType: "reverse",
-                            }}
-                          >
-                            <span className="text-2xl">{item.icon}</span>
-                          </motion.div>
-                          <span className="text-white text-sm font-medium">{item.label}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Portfolio Stats */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 2.4, duration: 0.8, ease: "easeOut" }}
-                      className="grid grid-cols-3 gap-6 mb-8"
-                    >
-                      {[
-                        { number: "250+", label: "Artworks", icon: "🎨" },
-                        { number: "100+", label: "Happy Clients", icon: "😊" },
-                        { number: "4.9★", label: "Rating", icon: "⭐" },
-                      ].map((stat, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 2.6 + index * 0.2, duration: 0.6, ease: "easeOut" }}
-                          className="text-center p-4 rounded-xl"
-                          style={{
-                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
-                            backdropFilter: "blur(10px)",
-                            border: "1px solid rgba(255, 255, 255, 0.1)",
-                          }}
-                        >
-                          <div className="text-2xl mb-2">{stat.icon}</div>
-                          <div className="text-2xl font-bold text-white mb-1">{stat.number}</div>
-                          <div className="text-sm text-white/70">{stat.label}</div>
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 3.2, duration: 0.6, ease: "easeOut" }}
-                    className="flex justify-center gap-4 mb-8"
-                  >
-                    {["🎨", "✏️", "🖌️", "🎭", "🌈", "✨"].map((icon, index) => (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                    {[
+                      { icon: "🎨", label: "Logo Design" },
+                      { icon: "✏️", label: "Illustrations" },
+                      { icon: "🏷️", label: "Branding" },
+                      { icon: "🖼️", label: "Digital Art" },
+                    ].map((item, index) => (
                       <motion.div
                         key={index}
-                        className="text-3xl sm:text-4xl cursor-pointer"
-                        animate={{
-                          y: [0, -12, 0],
-                          rotate: [0, 15, -15, 0],
-                          scale: [1, 1.2, 1],
-                        }}
-                        transition={{
-                          duration: 4,
-                          delay: index * 0.4,
-                          repeat: Number.POSITIVE_INFINITY,
-                          repeatType: "reverse",
-                          ease: "easeInOut",
-                        }}
-                        whileHover={{
-                          scale: 1.4,
-                          rotate: 360,
-                          transition: { duration: 0.6 },
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1.0 + index * 0.1, duration: 0.5, ease: "easeOut" }}
+                        className="flex flex-col items-center gap-3 p-4 rounded-xl"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.08)",
+                          backdropFilter: "blur(10px)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
                         }}
                       >
-                        {icon}
+                        <span className="text-3xl">{item.icon}</span>
+                        <span className="text-white text-sm font-medium">{item.label}</span>
                       </motion.div>
                     ))}
-                  </motion.div>
+                  </div>
 
-                  <motion.div
-                    initial={{ y: 30, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 3.6, duration: 0.6, ease: "easeOut" }}
-                    className="text-center"
-                  >
-                    <motion.button
-                      className="relative overflow-hidden px-8 py-3 rounded-full font-bold text-lg transition-all duration-300"
-                      style={{
-                        background: "linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1)",
-                        color: "white",
-                        boxShadow: "0 10px 30px rgba(255, 107, 107, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)",
-                      }}
-                      whileHover={{
-                        scale: 1.05,
-                        boxShadow: "0 15px 40px rgba(255, 107, 107, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2)",
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        window.open("https://illustratorart.lk", "_blank")
-                      }}
-                    >
-                      {/* Button Shine Effect */}
+                  <div className="grid grid-cols-3 gap-6 mb-8">
+                    {[
+                      { number: "250+", label: "Artworks", icon: "🎨" },
+                      { number: "100+", label: "Happy Clients", icon: "😊" },
+                      { number: "4.9★", label: "Rating", icon: "⭐" },
+                    ].map((stat, index) => (
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent"
-                        initial={{ x: "-100%" }}
-                        animate={{ x: "100%" }}
-                        transition={{
-                          duration: 2.5,
-                          repeat: Number.POSITIVE_INFINITY,
-                          repeatDelay: 4,
+                        key={index}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1.4 + index * 0.1, duration: 0.5, ease: "easeOut" }}
+                        className="text-center p-4 rounded-xl"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.08)",
+                          backdropFilter: "blur(10px)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
                         }}
-                      />
-                      <span className="relative z-10">🎨 Visit Portfolio</span>
-                    </motion.button>
+                      >
+                        <div className="text-2xl mb-2">{stat.icon}</div>
+                        <div className="text-xl font-bold text-white mb-1">{stat.number}</div>
+                        <div className="text-sm text-white/70">{stat.label}</div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
 
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 0.7 }}
-                      transition={{ delay: 4.0, duration: 0.5 }}
-                      className="text-xs sm:text-sm mt-6 text-center text-white/60"
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.8, duration: 0.6, ease: "easeOut" }}
+                  className="flex justify-center gap-4 mb-10"
+                >
+                  {["🎨", "✏️", "🖌️", "🎭"].map((icon, index) => (
+                    <motion.div
+                      key={index}
+                      className="text-3xl sm:text-4xl cursor-pointer"
+                      whileHover={{
+                        scale: 1.2,
+                        transition: { duration: 0.3 },
+                      }}
                     >
-                      Click anywhere to close • Click button to visit portfolio
-                    </motion.p>
-                  </motion.div>
-                </div>
-              </motion.div>
+                      {icon}
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
+                  className="text-center"
+                >
+                  <motion.button
+                    className="px-8 py-3 rounded-full font-bold text-lg transition-all duration-300"
+                    style={{
+                      background: "linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1)",
+                      color: "white",
+                      boxShadow: "0 8px 25px rgba(255, 107, 107, 0.4)",
+                    }}
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 12px 35px rgba(255, 107, 107, 0.6)",
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      window.open("https://illustratorart.lk", "_blank")
+                    }}
+                  >
+                    🎨 Visit Portfolio
+                  </motion.button>
+
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.6 }}
+                    transition={{ delay: 2.4, duration: 0.5 }}
+                    className="text-sm mt-6 text-center text-white/60"
+                  >
+                    Click anywhere to close • Click button to visit portfolio
+                  </motion.p>
+                </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         )}
