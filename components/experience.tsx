@@ -63,7 +63,7 @@ export default function Experience() {
 
   return (
     <section className="py-20 bg-gray-50/50 dark:bg-gray-900/20">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}

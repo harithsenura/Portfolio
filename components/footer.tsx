@@ -5,7 +5,7 @@ import { GlassyIcon } from "@/components/ui/glassy-icon"
 export default function Footer() {
   return (
     <footer className="bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center gap-2 text-2xl font-bold mb-4">

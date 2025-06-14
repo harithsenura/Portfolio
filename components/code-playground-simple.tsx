@@ -423,7 +423,8 @@ export default function CodePlaygroundSimple() {
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-3 sm:px-4">
+      {/* Mobile optimized container */}
+      <div className={`${isMobileView ? "px-4 mx-auto" : "container mx-auto px-4 sm:px-6 md:px-8"}`}>
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
@@ -440,7 +441,7 @@ export default function CodePlaygroundSimple() {
 
         {/* Mobile Snippet Selector */}
         {isMobileView && (
-          <div className="mb-2 sm:mb-4 px-0">
+          <div className="mb-4">
             <div className="code-playground-mobile-container">
               <div className="code-playground-mobile-selector-inner">
                 <button onClick={prevSnippet} className="code-nav-button">
@@ -515,19 +516,46 @@ export default function CodePlaygroundSimple() {
             </motion.div>
           )}
 
-          {/* Code Editor */}
+          {/* Code Editor - Mobile Optimized */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className={isMobileView ? "px-0" : "lg:col-span-4"}
+            className={isMobileView ? "w-full px-2" : "lg:col-span-4"}
           >
             <div
-              className={`code-playground-editor-container ${isFullscreen && isMobileView ? "mobile-fullscreen" : ""}`}
+              className={`${isFullscreen && isMobileView ? "mobile-fullscreen" : ""} ${
+                isMobileView ? "w-full max-w-sm mx-auto" : "code-playground-editor-container"
+              }`}
+              style={
+                isMobileView
+                  ? {
+                      background: resolvedTheme === "dark" ? "rgba(17, 25, 40, 0.8)" : "rgba(255, 255, 255, 0.8)",
+                      backdropFilter: "blur(12px)",
+                      borderRadius: "16px",
+                      border: `1px solid ${
+                        resolvedTheme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"
+                      }`,
+                      boxShadow:
+                        resolvedTheme === "dark"
+                          ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                          : "0 8px 32px rgba(31, 38, 135, 0.15)",
+                      overflow: "hidden",
+                      margin: "0 auto",
+                      padding: "0",
+                    }
+                  : {}
+              }
             >
-              <div className="code-playground-editor-inner">
+              <div className={isMobileView ? "w-full" : "code-playground-editor-inner"}>
                 {/* Editor Header */}
-                <div className="code-playground-header">
+                <div
+                  className={
+                    isMobileView
+                      ? "flex items-center justify-between p-3 border-b border-white/10 dark:border-gray-700/20"
+                      : "code-playground-header"
+                  }
+                >
                   <div className="flex items-center">
                     <GlassyIcon
                       icon={Code}
@@ -545,37 +573,22 @@ export default function CodePlaygroundSimple() {
                   <div className="flex gap-1 items-center">
                     {/* Mobile fullscreen toggle */}
                     {isMobileView && (
-                      <Button
-                        size="sm"
-                        variant="glass"
-                        className="code-playground-button h-6 px-1 text-[9px]"
-                        onClick={toggleFullscreen}
-                      >
+                      <Button size="sm" variant="glass" className="h-6 px-1 text-[9px]" onClick={toggleFullscreen}>
                         {isFullscreen ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
                       </Button>
                     )}
                     <Button
                       size="sm"
                       variant="glass"
-                      className="code-playground-button h-6 px-1 text-[9px]"
+                      className="h-6 px-1 text-[9px]"
                       onClick={() => setIsEditing(!isEditing)}
                     >
                       {isEditing ? "View" : "Edit"}
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="glass"
-                      className="code-playground-button h-6 px-1 text-[9px]"
-                      onClick={handleCopy}
-                    >
+                    <Button size="sm" variant="glass" className="h-6 px-1 text-[9px]" onClick={handleCopy}>
                       {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="glass"
-                      className="code-playground-button h-6 px-1 text-[9px]"
-                      onClick={handleReset}
-                    >
+                    <Button size="sm" variant="glass" className="h-6 px-1 text-[9px]" onClick={handleReset}>
                       <RefreshCw className="h-3 w-3" />
                     </Button>
 
@@ -656,43 +669,51 @@ export default function CodePlaygroundSimple() {
                 </div>
 
                 {/* Code Editor Area */}
-                <div className="code-playground-content">
+                <div className={isMobileView ? "p-1" : "code-playground-content"}>
                   {isEditing ? (
                     <textarea
                       value={userCode}
                       onChange={(e) => setUserCode(e.target.value)}
-                      className="code-editor"
+                      className={
+                        isMobileView
+                          ? "w-full resize-none border-none outline-none bg-transparent text-gray-800 dark:text-gray-200 font-mono text-xs leading-relaxed p-4"
+                          : "code-editor"
+                      }
                       spellCheck="false"
                       style={{
                         height:
                           isFullscreen && isMobileView
                             ? "calc(100vh - 80px)"
                             : isSmallMobile
-                              ? "120px" // වැඩි කරන්න 100px වෙනුවට
+                              ? "140px"
                               : isMobileView
-                                ? "150px" // වැඩි කරන්න 120px වෙනුවට
-                                : "400px", // වැඩි කරන්න 300px වෙනුවට
+                                ? "180px"
+                                : "400px",
                         fontSize: isSmallMobile ? "10px" : isMobileView ? "11px" : "14px",
                       }}
                     />
                   ) : (
                     <div
-                      className="syntax-highlighter-container"
+                      className={
+                        isMobileView
+                          ? "w-full overflow-auto p-4 font-mono text-xs leading-relaxed"
+                          : "syntax-highlighter-container"
+                      }
                       style={{
                         height:
                           isFullscreen && isMobileView
                             ? "calc(100vh - 80px)"
                             : isSmallMobile
-                              ? "120px" // Ultra compact for small screens
+                              ? "140px"
                               : isMobileView
-                                ? "150px" // Compact for mobile
+                                ? "180px"
                                 : "400px",
                         fontSize: isSmallMobile ? "10px" : isMobileView ? "11px" : "14px",
-                        overflow: "auto",
-                        padding: isSmallMobile ? "0.25rem" : isMobileView ? "0.5rem" : "1rem",
-                        fontFamily: "monospace",
-                        lineHeight: 1.2,
-                        backgroundColor: resolvedTheme === "dark" ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.3)",
+                        backgroundColor: isMobileView
+                          ? "transparent"
+                          : resolvedTheme === "dark"
+                            ? "rgba(0, 0, 0, 0.2)"
+                            : "rgba(255, 255, 255, 0.3)",
                         color: resolvedTheme === "dark" ? "#e2e8f0" : "#1a202c",
                       }}
                     >
@@ -728,11 +749,11 @@ export default function CodePlaygroundSimple() {
                   </motion.div>
                 )}
 
-                {/* Mobile Code Description - Ultra compact */}
+                {/* Mobile Code Description */}
                 {isMobileView && (
-                  <div className="p-2 border-t border-white/10 dark:border-gray-700/20">
+                  <div className="p-4 border-t border-white/10 dark:border-gray-700/20">
                     <p className="text-[10px] text-gray-600 dark:text-gray-400 leading-tight">
-                      {activeSnippet.description.substring(0, 80)}...
+                      {activeSnippet.description.substring(0, 100)}...
                     </p>
                   </div>
                 )}

@@ -35,7 +35,7 @@ export default function Hero() {
       </div>
 
       {/* Added pt-24 to create more space between navigation and hero content */}
-      <div className="container mx-auto px-4 py-20 pt-24 md:pt-28 flex flex-col items-center text-center z-10">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-20 pt-24 md:pt-28 flex flex-col items-center text-center z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -86,7 +86,7 @@ export default function Hero() {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="text-4xl md:text-6xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300"
           >
-            I am Harith Divarathna
+            I'm Harith Divarathna
           </motion.h1>
 
           <motion.h2

@@ -29,9 +29,9 @@ const webProjects = [
       "Reporting and revenue analytics",
     ],
     images: [
-      "/HMS.png?height=600&width=800",
-      "/HMS1.png?height=600&width=800",
-      "/HMS2.png?height=600&width=800",
+      "/HSM.png?height=600&width=800",
+      "/HSM1.png?height=600&width=800",
+      "/HSM2.png?height=600&width=800",
     ],
     tags: ["React", "Node.js", "MongoDB", "Express", "Tailwind"],
     demoLink: "https://hotel-management-system-red.vercel.app/",
@@ -40,7 +40,7 @@ const webProjects = [
     category: "web",
   },
   {
-    title: "Talents Showcasting",
+    title: "Talent Showcasting",
     description:
       "Real-time analytics dashboard for businesses to monitor KPIs, sales data, and customer insights with interactive charts.",
     longDescription:
@@ -303,7 +303,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-20 bg-gray-50/50 dark:bg-gray-900/20">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}

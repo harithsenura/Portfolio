@@ -135,7 +135,7 @@ export default function Skills() {
         <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
@@ -225,7 +225,7 @@ export default function Skills() {
 
         {/* Mobile Carousel View */}
         {isMobile && (
-          <div className="relative">
+          <div className="relative px-2">
             {/* Navigation Buttons */}
             <div className="flex justify-between items-center mb-6">
               <Button
@@ -253,18 +253,19 @@ export default function Skills() {
               </Button>
             </div>
 
-            {/* Carousel Container */}
+            {/* Single Card Display */}
             <div className="relative overflow-hidden rounded-xl">
               <motion.div
-                className="flex"
-                animate={{
-                  x: `-${currentIndex * 100}%`,
-                }}
+                key={currentIndex}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
                 transition={{
                   type: "spring",
                   stiffness: 300,
                   damping: 30,
                 }}
+                className="w-full"
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.1}
@@ -279,40 +280,32 @@ export default function Skills() {
                   }
                 }}
               >
-                {currentSkills.map((skill, index) => (
-                  <motion.div
-                    key={index}
-                    className="w-full flex-shrink-0 px-2"
-                    whileHover={{
-                      y: -5,
-                      transition: { duration: 0.3 },
-                    }}
-                  >
-                    <div className="expertise-card h-full">
-                      <div className="expertise-card-blob"></div>
-                      <div className="expertise-card-content">
-                        <div className="flex items-center mb-4">
-                          <GlassyIcon icon={skill.icon} color={skill.color as any} />
-                          <h3 className="text-lg font-semibold ml-3">{skill.category}</h3>
-                        </div>
-                        <ul className="space-y-2">
-                          {skill.items.map((item, itemIndex) => (
-                            <motion.li
-                              key={itemIndex}
-                              className="flex items-center text-gray-700 dark:text-gray-300"
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.1 * itemIndex }}
-                            >
-                              <div className="expertise-bullet"></div>
-                              {item}
-                            </motion.li>
-                          ))}
-                        </ul>
-                      </div>
+                <div className="expertise-card h-full">
+                  <div className="expertise-card-blob"></div>
+                  <div className="expertise-card-content">
+                    <div className="flex items-center mb-4">
+                      <GlassyIcon
+                        icon={currentSkills[currentIndex].icon}
+                        color={currentSkills[currentIndex].color as any}
+                      />
+                      <h3 className="text-lg font-semibold ml-3">{currentSkills[currentIndex].category}</h3>
                     </div>
-                  </motion.div>
-                ))}
+                    <ul className="space-y-2">
+                      {currentSkills[currentIndex].items.map((item, itemIndex) => (
+                        <motion.li
+                          key={itemIndex}
+                          className="flex items-center text-gray-700 dark:text-gray-300"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 * itemIndex }}
+                        >
+                          <div className="expertise-bullet"></div>
+                          {item}
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </motion.div>
             </div>
 

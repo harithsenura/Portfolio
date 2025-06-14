@@ -608,6 +608,60 @@
       -ms-user-select: none;
     }
   }
+
+  /* Liquid Glass Run Button */
+  .liquid-run-button {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .liquid-run-button::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.6s ease;
+    z-index: 1;
+  }
+
+  .liquid-run-button:hover::before {
+    transform: scale(1);
+    animation: liquidRipple 1.2s ease-out;
+  }
+
+  @keyframes liquidRipple {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  .liquid-run-button:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+    transform: translateY(-1px);
+  }
+
+  .liquid-run-button:active {
+    transform: translateY(0px) scale(0.98);
+    box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  }
+
+  /* Dark mode adjustments */
+  .dark .liquid-run-button {
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .liquid-run-button:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  }
 }
 
 /* Custom animations */
@@ -799,5 +853,229 @@ html {
   .code-playground-editor-inner {
     width: calc(100vw - 1rem) !important;
     max-width: calc(100vw - 1rem) !important;
+  }
+}
+
+/* Mobile consistent padding for entire website */
+@media (max-width: 767px) {
+  /* Global container padding for mobile */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Ensure all sections have consistent mobile padding */
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Hero section mobile padding */
+  #home .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* About section mobile padding */
+  #about .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Skills section mobile padding */
+  #skills .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Projects section mobile padding */
+  #projects .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Experience section mobile padding */
+  #experience .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Testimonials section mobile padding */
+  #testimonials .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Contact section mobile padding */
+  #contact .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Footer mobile padding */
+  footer .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Code playground mobile padding */
+  #code-playground .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Header mobile padding */
+  header .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Glass cards mobile padding adjustment */
+  .glass-card {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Grid items mobile spacing */
+  .grid > * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Ensure buttons and form elements respect padding */
+  .w-full {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Text content mobile padding */
+  .text-center {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Ensure no elements break out of container */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* iPhone specific padding (smaller screens) */
+@media screen and (max-width: 390px) {
+  .container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  section {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* All section containers for iPhone */
+  #home .container,
+  #about .container,
+  #skills .container,
+  #projects .container,
+  #experience .container,
+  #testimonials .container,
+  #contact .container,
+  #code-playground .container,
+  footer .container,
+  header .container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+}
+
+/* Very small screens (iPhone SE, etc.) */
+@media screen and (max-width: 375px) {
+  .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  section {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* All section containers for very small screens */
+  #home .container,
+  #about .container,
+  #skills .container,
+  #projects .container,
+  #experience .container,
+  #testimonials .container,
+  #contact .container,
+  #code-playground .container,
+  footer .container,
+  header .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Reduce text padding on very small screens */
+  .text-center {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+}
+
+/* Landscape mobile optimization */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Ensure consistent spacing for all mobile elements */
+@media (max-width: 767px) {
+  /* Remove any negative margins that might break layout */
+  .mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* Ensure flex and grid items don't overflow */
+  .flex > *,
+  .grid > * {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  /* Consistent button spacing */
+  .flex.gap-4 {
+    gap: 0.75rem;
+  }
+
+  .flex.gap-6 {
+    gap: 1rem;
+  }
+
+  /* Ensure images don't break layout */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Consistent card spacing */
+  .space-y-4 > * + * {
+    margin-top: 0.75rem;
+  }
+
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+
+  .space-y-8 > * + * {
+    margin-top: 1.25rem;
   }
 }

@@ -20,7 +20,7 @@ export default function About() {
 
   return (
     <section id="about" className="py-20 bg-gray-50/50 dark:bg-gray-900/20">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <motion.div
           ref={ref}
           initial="hidden"
@@ -45,7 +45,7 @@ export default function About() {
           >
             <div className="relative z-10 overflow-hidden rounded-2xl shadow-xl">
               <Image
-                src="/About.png?height=400&width=400"
+                src="/ab1.png?height=600&width=600"
                 alt="Professional Portrait"
                 width={600}
                 height={600}
