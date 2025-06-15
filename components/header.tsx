@@ -17,6 +17,7 @@ const navItems = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isFlying, setIsFlying] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +26,22 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const handleAppleIconClick = () => {
+    setIsFlying(true)
+
+    // After animation completes, navigate to self section
+    setTimeout(() => {
+      const selfSection = document.getElementById("self-app-showcase")
+      if (selfSection) {
+        selfSection.scrollIntoView({ behavior: "smooth" })
+      }
+      // Reset flying state after navigation
+      setTimeout(() => {
+        setIsFlying(false)
+      }, 1000)
+    }, 2000) // Animation duration
+  }
 
   return (
     <>
@@ -42,12 +59,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => {
-                  const selfSection = document.getElementById("self-app-showcase")
-                  if (selfSection) {
-                    selfSection.scrollIntoView({ behavior: "smooth" })
-                  }
-                }}
+                onClick={handleAppleIconClick}
                 className="relative rounded-full p-4 overflow-hidden group w-14 h-14"
                 aria-label="View Self App"
               >
@@ -130,12 +142,7 @@ export default function Header() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => {
-              const selfSection = document.getElementById("self-app-showcase")
-              if (selfSection) {
-                selfSection.scrollIntoView({ behavior: "smooth" })
-              }
-            }}
+            onClick={handleAppleIconClick}
             className="relative rounded-full p-4 overflow-hidden group w-14 h-14"
             aria-label="View Self App"
           >
@@ -329,6 +336,181 @@ export default function Header() {
               </div>
             </motion.div>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* Flying Apple Icon Animation */}
+      <AnimatePresence>
+        {isFlying && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] pointer-events-none"
+          >
+            {/* Animated Background Blur */}
+            <motion.div
+              initial={{ backdropFilter: "blur(0px)" }}
+              animate={{ backdropFilter: "blur(8px)" }}
+              exit={{ backdropFilter: "blur(0px)" }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0 bg-black/10"
+            />
+
+            {/* Flying Apple Icon */}
+            <motion.div
+              initial={{
+                x: window.innerWidth - 100,
+                y: 50,
+                scale: 1,
+                rotateY: 0,
+                rotateX: 0,
+                filter: "blur(0px)",
+              }}
+              animate={{
+                x: window.innerWidth / 2 - 50,
+                y: window.innerHeight / 2 - 50,
+                scale: [1, 2, 1.5, 3, 1],
+                rotateY: [0, 180, 360, 540, 720],
+                rotateX: [0, 15, -15, 10, 0],
+                rotateZ: [0, 45, -45, 90, 0],
+                filter: ["blur(0px)", "blur(2px)", "blur(4px)", "blur(2px)", "blur(0px)"],
+              }}
+              transition={{
+                duration: 2,
+                ease: "easeInOut",
+                times: [0, 0.3, 0.5, 0.8, 1],
+              }}
+              className="absolute w-20 h-20 flex items-center justify-center"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {/* Glowing Ring Effect */}
+              <motion.div
+                animate={{
+                  scale: [1, 2, 3, 4, 5],
+                  opacity: [0.8, 0.6, 0.4, 0.2, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  ease: "easeOut",
+                }}
+                className="absolute inset-0 bg-gradient-to-r from-primary/40 to-purple-500/40 rounded-full blur-xl"
+              />
+
+              {/* Multiple Ring Effects */}
+              <motion.div
+                animate={{
+                  scale: [1, 1.5, 2, 2.5, 3],
+                  opacity: [0.6, 0.4, 0.3, 0.1, 0],
+                  rotate: [0, 180, 360],
+                }}
+                transition={{
+                  duration: 2,
+                  ease: "easeOut",
+                  delay: 0.2,
+                }}
+                className="absolute inset-0 border-2 border-primary/30 rounded-full"
+              />
+
+              {/* Icon Container with 3D Effect */}
+              <motion.div
+                animate={{
+                  rotateY: [0, 360, 720],
+                  rotateX: [0, 180, 360],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  ease: "easeInOut",
+                }}
+                className="relative w-16 h-16 bg-white rounded-2xl shadow-2xl flex items-center justify-center overflow-hidden"
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                {/* 3D Depth Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-2xl" />
+                <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-white/20 to-white/40 rounded-2xl" />
+
+                {/* Shine Effect */}
+                <motion.div
+                  animate={{
+                    x: [-100, 100, -100],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: 1,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-12 rounded-2xl"
+                />
+
+                {/* Apple Icon */}
+                <Apple className="relative z-10 h-8 w-8 text-primary drop-shadow-lg" />
+
+                {/* Floating Particles */}
+                {[...Array(8)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    animate={{
+                      y: [0, -40, -80],
+                      x: [0, Math.sin(i) * 30, Math.sin(i) * 60],
+                      opacity: [0, 1, 0],
+                      scale: [0, 1, 0],
+                      rotate: [0, 360],
+                    }}
+                    transition={{
+                      duration: 2,
+                      delay: i * 0.1,
+                      ease: "easeOut",
+                    }}
+                    className="absolute w-2 h-2 bg-gradient-to-r from-primary to-purple-500 rounded-full"
+                    style={{
+                      top: `${50 + Math.sin(i * 45) * 20}%`,
+                      left: `${50 + Math.cos(i * 45) * 20}%`,
+                    }}
+                  />
+                ))}
+              </motion.div>
+
+              {/* Trail Effect */}
+              <motion.div
+                animate={{
+                  scale: [0, 1, 2],
+                  opacity: [0.8, 0.4, 0],
+                  rotate: [0, 180],
+                }}
+                transition={{
+                  duration: 1.5,
+                  ease: "easeOut",
+                  delay: 0.5,
+                }}
+                className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-2xl"
+              />
+            </motion.div>
+
+            {/* Ripple Effects */}
+            {[...Array(3)].map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{
+                  scale: 0,
+                  opacity: 0.6,
+                  x: window.innerWidth / 2 - 25,
+                  y: window.innerHeight / 2 - 25,
+                }}
+                animate={{
+                  scale: [0, 4, 8],
+                  opacity: [0.6, 0.3, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  delay: i * 0.3,
+                  ease: "easeOut",
+                }}
+                className="absolute w-12 h-12 border-2 border-primary/30 rounded-full"
+              />
+            ))}
+          </motion.div>
         )}
       </AnimatePresence>
     </>
