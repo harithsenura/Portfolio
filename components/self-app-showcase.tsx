@@ -4,7 +4,7 @@ import type React from "react"
 
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { ExternalLink, Apple, Play, Star } from "lucide-react"
+import { ExternalLink, Apple, Play } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -32,7 +32,7 @@ const appScreenshots = [
   {
     title: "Habit Tracker",
     description: "Build positive habits",
-    image: "/self4.png?height=600&width=300",
+    image: "/self4.png.svg?height=600&width=300",
     gradient: "from-orange-500 to-red-500",
   },
   {
@@ -237,17 +237,284 @@ export default function SelfAppShowcase() {
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.6 }}
         >
-          {/* Liquid Glass Card */}
-          <div className="liquid-glass p-4 sm:p-6 md:p-8 relative overflow-hidden">
-            {/* Featured Project Badge */}
-            <div className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-gradient-to-r from-primary to-purple-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1 z-10">
-              <Star className="h-3 w-3" />
-              <span className="hidden sm:inline">Featured</span>
+          {/* Mobile Layout - iPhone and Icon Above Card */}
+          <div className="block lg:hidden">
+            {/* iPhone Mockup with App Icon - Mobile */}
+            <div className="relative flex justify-center mb-8">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="relative flex items-center justify-center gap-6"
+              >
+                {/* App Icon on Left Side */}
+                <motion.div
+                  animate={{
+                    y: [0, -20, 0],
+                    rotate: [0, 5, -5, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                  className="relative z-20"
+                >
+                  <div className="relative">
+                    {/* Glowing Ring Effect */}
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.3, 0.6, 0.3],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "easeInOut",
+                      }}
+                      className="absolute inset-0 w-16 h-16 bg-gradient-to-r from-primary/30 to-purple-500/30 rounded-full blur-lg"
+                    />
+
+                    {/* App Icon Container */}
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="relative w-12 h-12 bg-white rounded-xl shadow-2xl flex items-center justify-center overflow-hidden"
+                    >
+                      {/* Shine Effect */}
+                      <motion.div
+                        animate={{
+                          x: [-100, 100],
+                          opacity: [0, 1, 0],
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Number.POSITIVE_INFINITY,
+                          repeatDelay: 2,
+                        }}
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
+                      />
+
+                      {/* Your App Icon */}
+                      <Image
+                        src="/images/self-app-icon.png"
+                        alt="Self App Icon"
+                        width={32}
+                        height={32}
+                        className="relative z-10"
+                      />
+                    </motion.div>
+
+                    {/* Floating Particles */}
+                    {[...Array(4)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        animate={{
+                          y: [0, -20, 0],
+                          x: [0, Math.sin(i) * 15, 0],
+                          opacity: [0, 1, 0],
+                          scale: [0, 1, 0],
+                        }}
+                        transition={{
+                          duration: 4,
+                          repeat: Number.POSITIVE_INFINITY,
+                          delay: i * 0.5,
+                          ease: "easeInOut",
+                        }}
+                        className="absolute w-1.5 h-1.5 bg-gradient-to-r from-primary to-purple-500 rounded-full"
+                        style={{
+                          top: `${20 + Math.sin(i * 60) * 25}%`,
+                          left: `${20 + Math.cos(i * 60) * 25}%`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Connection Line Animation */}
+                <motion.div
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{
+                    duration: 2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                  }}
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
+                >
+                  <svg width="40" height="2" className="text-primary/30">
+                    <motion.line
+                      x1="0"
+                      y1="1"
+                      x2="40"
+                      y2="1"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeDasharray="3,3"
+                      animate={{
+                        strokeDashoffset: [0, -6],
+                      }}
+                      transition={{
+                        duration: 1,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "linear",
+                      }}
+                    />
+                  </svg>
+                </motion.div>
+
+                {/* iPhone Frame */}
+                <motion.div
+                  animate={{
+                    y: [0, -5, 0],
+                    rotateY: [0, 2, 0],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                  className="relative w-40 aspect-[9/19.5] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[1.5rem] p-1 shadow-2xl"
+                >
+                  {/* Screen */}
+                  <div className="w-full h-full bg-black rounded-[1.2rem] overflow-hidden relative">
+                    {/* Dynamic Island */}
+                    <div className="absolute top-1.5 left-1/2 transform -translate-x-1/2 w-16 h-4 bg-gray-900 rounded-full z-20"></div>
+
+                    {/* Full Screen Screenshot Container with Swipe */}
+                    <div
+                      className="absolute inset-0 rounded-[1.2rem] overflow-hidden"
+                      onTouchStart={handleTouchStart}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleTouchEnd}
+                    >
+                      {/* Screenshot Image - Full Screen */}
+                      <motion.div
+                        key={currentScreenshot}
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -50 }}
+                        transition={{ duration: 0.4 }}
+                        className="absolute inset-0"
+                      >
+                        <img
+                          src={appScreenshots[currentScreenshot].image || "/placeholder.svg"}
+                          alt={appScreenshots[currentScreenshot].title}
+                          className="w-full h-full object-cover rounded-[1.2rem]"
+                        />
+                      </motion.div>
+
+                      {/* Navigation Arrows */}
+                      <button
+                        onClick={prevScreenshot}
+                        className="absolute left-1 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-colors z-20"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+
+                      <button
+                        onClick={nextScreenshot}
+                        className="absolute right-1 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-colors z-20"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+
+                      {/* Screenshot Indicators - Bottom */}
+                      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1 z-20">
+                        {appScreenshots.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentScreenshot(index)}
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                              index === currentScreenshot ? "bg-white scale-125" : "bg-white/50 hover:bg-white/70"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 items-center">
+            {/* Mobile App Info Card */}
+            <div className="liquid-glass p-4 sm:p-6 relative overflow-hidden">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={inView ? { scale: 1 } : { scale: 0 }}
+                transition={{ delay: 0.2, type: "spring" }}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary mb-4"
+              >
+                <Apple className="h-4 w-4" />
+                <span className="text-sm font-medium">iOS App</span>
+              </motion.div>
+
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+                Self - Life Planning App
+              </h3>
+
+              <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed text-sm">
+                A comprehensive life management application built with Swift. Designed to help users organize their
+                memories, manage finances, track habits, and achieve personal development goals.
+              </p>
+
+              {/* Quick Features Grid */}
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                {selfAppFeatures.slice(0, 4).map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    className="flex items-center gap-2 p-2 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                  >
+                    <span className="text-base">{feature.icon}</span>
+                    <span className="text-xs font-medium">{feature.title}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Tech Stack */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {["Swift", "SwiftUI", "Core Data", "iOS"].map((tech, index) => (
+                  <span key={index} className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-3">
+                <Button
+                  onClick={() => setShowAppFeatures(!showAppFeatures)}
+                  className="rounded-full px-4 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-sm"
+                >
+                  <Play className="mr-2 h-4 w-4" />
+                  {showAppFeatures ? "Hide Features" : "See Features"}
+                </Button>
+                <Button
+                  variant="glass"
+                  className="rounded-full px-4 text-sm"
+                  onClick={() => window.open("#", "_blank")}
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Visit Website
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout - Reduced Width Card */}
+          <div className="hidden lg:block relative">
+            {/* Liquid Glass Card - Reduced Width */}
+            <div className="liquid-glass p-6 md:p-8 relative overflow-hidden max-w-2xl">
               {/* App Info */}
-              <div className="order-2 lg:order-1">
+              <div>
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={inView ? { scale: 1 } : { scale: 0 }}
@@ -258,343 +525,336 @@ export default function SelfAppShowcase() {
                   <span className="text-sm font-medium">iOS App</span>
                 </motion.div>
 
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
                   Self - Life Planning App
                 </h3>
 
-                <p className="text-gray-700 dark:text-gray-300 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
                   A comprehensive life management application built with Swift. Designed to help users organize their
                   memories, manage finances, track habits, and achieve personal development goals.
                 </p>
 
                 {/* Quick Features Grid */}
-                <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <div className="grid grid-cols-2 gap-3 mb-6">
                   {selfAppFeatures.slice(0, 4).map((feature, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                       transition={{ delay: 0.3 + index * 0.1 }}
-                      className="flex items-center gap-2 p-2 sm:p-3 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                      className="flex items-center gap-2 p-3 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
                     >
                       <span className="text-lg">{feature.icon}</span>
-                      <span className="text-xs sm:text-sm font-medium">{feature.title}</span>
+                      <span className="text-sm font-medium">{feature.title}</span>
                     </motion.div>
                   ))}
                 </div>
 
                 {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
+                <div className="flex flex-wrap gap-2 mb-6">
                   {["Swift", "SwiftUI", "Core Data", "iOS"].map((tech, index) => (
-                    <span
-                      key={index}
-                      className="px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-full bg-primary/10 text-primary font-medium"
-                    >
+                    <span key={index} className="px-3 py-1 text-sm rounded-full bg-primary/10 text-primary font-medium">
                       {tech}
                     </span>
                   ))}
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex gap-3">
                   <Button
                     onClick={() => setShowAppFeatures(!showAppFeatures)}
-                    className="rounded-full px-4 sm:px-6 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-sm sm:text-base"
+                    className="rounded-full px-6 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
                   >
                     <Play className="mr-2 h-4 w-4" />
                     {showAppFeatures ? "Hide Features" : "See Features"}
                   </Button>
-                  <Button
-                    variant="glass"
-                    className="rounded-full px-4 sm:px-6 text-sm sm:text-base"
-                    onClick={() => window.open("#", "_blank")}
-                  >
+                  <Button variant="glass" className="rounded-full px-6" onClick={() => window.open("#", "_blank")}>
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Visit Website
                   </Button>
                 </div>
               </div>
+            </div>
 
-              {/* iPhone Mockup with App Icon on Left Side */}
-              <div className="relative order-1 lg:order-2 flex justify-center">
+            {/* iPhone Mockup with App Icon - Desktop Positioned */}
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 flex justify-center">
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="relative flex items-center justify-center gap-8"
+              >
+                {/* App Icon on Left Side */}
                 <motion.div
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                  className="relative flex items-center justify-center gap-8"
+                  animate={{
+                    y: [0, -20, 0],
+                    rotate: [0, 5, -5, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                  className="relative z-20"
                 >
-                  {/* App Icon on Left Side */}
-                  <motion.div
-                    animate={{
-                      y: [0, -20, 0],
-                      rotate: [0, 5, -5, 0],
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                    className="relative z-20"
-                  >
-                    <div className="relative">
-                      {/* Glowing Ring Effect */}
+                  <div className="relative">
+                    {/* Glowing Ring Effect */}
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.3, 0.6, 0.3],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "easeInOut",
+                      }}
+                      className="absolute inset-0 w-20 h-20 bg-gradient-to-r from-primary/30 to-purple-500/30 rounded-full blur-lg"
+                    />
+
+                    {/* App Icon Container */}
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="relative w-16 h-16 bg-white rounded-2xl shadow-2xl flex items-center justify-center overflow-hidden"
+                    >
+                      {/* Shine Effect */}
                       <motion.div
                         animate={{
-                          scale: [1, 1.2, 1],
-                          opacity: [0.3, 0.6, 0.3],
+                          x: [-100, 100],
+                          opacity: [0, 1, 0],
                         }}
                         transition={{
                           duration: 3,
                           repeat: Number.POSITIVE_INFINITY,
-                          ease: "easeInOut",
+                          repeatDelay: 2,
                         }}
-                        className="absolute inset-0 w-20 h-20 bg-gradient-to-r from-primary/30 to-purple-500/30 rounded-full blur-lg"
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
                       />
 
-                      {/* App Icon Container */}
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        className="relative w-16 h-16 bg-white rounded-2xl shadow-2xl flex items-center justify-center overflow-hidden"
-                      >
-                        {/* Shine Effect */}
-                        <motion.div
-                          animate={{
-                            x: [-100, 100],
-                            opacity: [0, 1, 0],
-                          }}
-                          transition={{
-                            duration: 3,
-                            repeat: Number.POSITIVE_INFINITY,
-                            repeatDelay: 2,
-                          }}
-                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
-                        />
+                      {/* Your App Icon */}
+                      <Image
+                        src="/images/self-app-icon.png"
+                        alt="Self App Icon"
+                        width={48}
+                        height={48}
+                        className="relative z-10"
+                      />
+                    </motion.div>
 
-                        {/* Your App Icon */}
-                        <Image
-                          src="/self.png"
-                          alt="Self App Icon"
-                          width={48}
-                          height={48}
-                          className="relative z-10"
+                    {/* Floating Particles */}
+                    {[...Array(6)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        animate={{
+                          y: [0, -30, 0],
+                          x: [0, Math.sin(i) * 20, 0],
+                          opacity: [0, 1, 0],
+                          scale: [0, 1, 0],
+                        }}
+                        transition={{
+                          duration: 4,
+                          repeat: Number.POSITIVE_INFINITY,
+                          delay: i * 0.5,
+                          ease: "easeInOut",
+                        }}
+                        className="absolute w-2 h-2 bg-gradient-to-r from-primary to-purple-500 rounded-full"
+                        style={{
+                          top: `${20 + Math.sin(i * 60) * 30}%`,
+                          left: `${20 + Math.cos(i * 60) * 30}%`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Connection Line Animation */}
+                <motion.div
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{
+                    duration: 2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                  }}
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
+                >
+                  <svg width="60" height="2" className="text-primary/30">
+                    <motion.line
+                      x1="0"
+                      y1="1"
+                      x2="60"
+                      y2="1"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeDasharray="5,5"
+                      animate={{
+                        strokeDashoffset: [0, -10],
+                      }}
+                      transition={{
+                        duration: 1,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "linear",
+                      }}
+                    />
+                  </svg>
+                </motion.div>
+
+                {/* iPhone Frame with Enhanced Animation */}
+                <motion.div
+                  animate={{
+                    y: [0, -5, 0],
+                    rotateY: [0, 2, 0],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                  className="relative w-64 lg:w-72 aspect-[9/19.5] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[2rem] sm:rounded-[2.5rem] p-1.5 sm:p-2 shadow-2xl"
+                >
+                  {/* Screen */}
+                  <div className="w-full h-full bg-black rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden relative">
+                    {/* Dynamic Island */}
+                    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-20 sm:w-24 h-5 sm:h-6 bg-gray-900 rounded-full z-20"></div>
+
+                    {/* Full Screen Screenshot Container with Swipe */}
+                    <div
+                      className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden"
+                      onTouchStart={handleTouchStart}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleTouchEnd}
+                    >
+                      {/* Screenshot Image - Full Screen */}
+                      <motion.div
+                        key={currentScreenshot}
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -50 }}
+                        transition={{ duration: 0.4 }}
+                        className="absolute inset-0"
+                      >
+                        <img
+                          src={appScreenshots[currentScreenshot].image || "/placeholder.svg"}
+                          alt={appScreenshots[currentScreenshot].title}
+                          className="w-full h-full object-cover rounded-[1.5rem] sm:rounded-[2rem]"
                         />
                       </motion.div>
 
-                      {/* Floating Particles */}
-                      {[...Array(6)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          animate={{
-                            y: [0, -30, 0],
-                            x: [0, Math.sin(i) * 20, 0],
-                            opacity: [0, 1, 0],
-                            scale: [0, 1, 0],
-                          }}
-                          transition={{
-                            duration: 4,
-                            repeat: Number.POSITIVE_INFINITY,
-                            delay: i * 0.5,
-                            ease: "easeInOut",
-                          }}
-                          className="absolute w-2 h-2 bg-gradient-to-r from-primary to-purple-500 rounded-full"
-                          style={{
-                            top: `${20 + Math.sin(i * 60) * 30}%`,
-                            left: `${20 + Math.cos(i * 60) * 30}%`,
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  {/* Connection Line Animation */}
-                  <motion.div
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{
-                      duration: 2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      repeatType: "reverse",
-                      ease: "easeInOut",
-                    }}
-                    className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
-                  >
-                    <svg width="60" height="2" className="text-primary/30">
-                      <motion.line
-                        x1="0"
-                        y1="1"
-                        x2="60"
-                        y2="1"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeDasharray="5,5"
-                        animate={{
-                          strokeDashoffset: [0, -10],
-                        }}
-                        transition={{
-                          duration: 1,
-                          repeat: Number.POSITIVE_INFINITY,
-                          ease: "linear",
-                        }}
-                      />
-                    </svg>
-                  </motion.div>
-
-                  {/* iPhone Frame with Enhanced Animation */}
-                  <motion.div
-                    animate={{
-                      y: [0, -5, 0],
-                      rotateY: [0, 2, 0],
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                    className="relative w-48 sm:w-56 md:w-64 lg:w-72 aspect-[9/19.5] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[2rem] sm:rounded-[2.5rem] p-1.5 sm:p-2 shadow-2xl"
-                  >
-                    {/* Screen */}
-                    <div className="w-full h-full bg-black rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden relative">
-                      {/* Dynamic Island */}
-                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-20 sm:w-24 h-5 sm:h-6 bg-gray-900 rounded-full z-20"></div>
-
-                      {/* Full Screen Screenshot Container with Swipe */}
-                      <div
-                        className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden"
-                        onTouchStart={handleTouchStart}
-                        onTouchMove={handleTouchMove}
-                        onTouchEnd={handleTouchEnd}
+                      {/* Navigation Arrows */}
+                      <button
+                        onClick={prevScreenshot}
+                        className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-colors z-20"
                       >
-                        {/* Screenshot Image - Full Screen */}
-                        <motion.div
-                          key={currentScreenshot}
-                          initial={{ opacity: 0, x: 50 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -50 }}
-                          transition={{ duration: 0.4 }}
-                          className="absolute inset-0"
-                        >
-                          <img
-                            src={appScreenshots[currentScreenshot].image || "/placeholder.svg"}
-                            alt={appScreenshots[currentScreenshot].title}
-                            className="w-full h-full object-cover rounded-[1.5rem] sm:rounded-[2rem]"
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+
+                      <button
+                        onClick={nextScreenshot}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-colors z-20"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+
+                      {/* Screenshot Indicators - Bottom */}
+                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
+                        {appScreenshots.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentScreenshot(index)}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                              index === currentScreenshot ? "bg-white scale-125" : "bg-white/50 hover:bg-white/70"
+                            }`}
                           />
-                        </motion.div>
-
-                        {/* Navigation Arrows */}
-                        <button
-                          onClick={prevScreenshot}
-                          className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-colors z-20"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                          </svg>
-                        </button>
-
-                        <button
-                          onClick={nextScreenshot}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-colors z-20"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </button>
-
-                        {/* Screenshot Indicators - Bottom */}
-                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
-                          {appScreenshots.map((_, index) => (
-                            <button
-                              key={index}
-                              onClick={() => setCurrentScreenshot(index)}
-                              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                index === currentScreenshot ? "bg-white scale-125" : "bg-white/50 hover:bg-white/70"
-                              }`}
-                            />
-                          ))}
-                        </div>
+                        ))}
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 </motion.div>
-              </div>
+              </motion.div>
             </div>
+          </div>
 
-            {/* Expandable Features Section */}
-            <motion.div
-              initial={false}
-              animate={{
-                height: showAppFeatures ? "auto" : 0,
-                opacity: showAppFeatures ? 1 : 0,
-              }}
-              transition={{ duration: 0.5 }}
-              className="overflow-hidden mt-6 sm:mt-8"
-            >
-              <div className="border-t border-white/20 dark:border-gray-700/30 pt-6 sm:pt-8">
-                <h4 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">App Features</h4>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                  {selfAppFeatures.map((feature, index) => (
+          {/* Expandable Features Section */}
+          <motion.div
+            initial={false}
+            animate={{
+              height: showAppFeatures ? "auto" : 0,
+              opacity: showAppFeatures ? 1 : 0,
+            }}
+            transition={{ duration: 0.5 }}
+            className="overflow-hidden mt-6 sm:mt-8"
+          >
+            <div className="border-t border-white/20 dark:border-gray-700/30 pt-6 sm:pt-8">
+              <h4 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">App Features</h4>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                {selfAppFeatures.map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    variants={featureVariants}
+                    initial="hidden"
+                    animate={showAppFeatures ? "visible" : "hidden"}
+                    transition={{ delay: index * 0.1 }}
+                    className="p-3 sm:p-4 rounded-xl bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm border border-white/20 dark:border-gray-700/20"
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-2xl">{feature.icon}</span>
+                      <h5 className="font-semibold text-sm sm:text-base">{feature.title}</h5>
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">{feature.description}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Interactive Screenshots Section */}
+              <div className="mt-6 sm:mt-8 text-center">
+                <h5 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">App Screenshots</h5>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+                  {appScreenshots.map((screen, index) => (
                     <motion.div
                       key={index}
-                      variants={featureVariants}
-                      initial="hidden"
-                      animate={showAppFeatures ? "visible" : "hidden"}
-                      transition={{ delay: index * 0.1 }}
-                      className="p-3 sm:p-4 rounded-xl bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm border border-white/20 dark:border-gray-700/20"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setCurrentScreenshot(index)}
+                      className={`aspect-[9/16] rounded-lg overflow-hidden cursor-pointer transition-all duration-300 relative ${
+                        currentScreenshot === index ? "ring-2 ring-primary scale-105" : ""
+                      }`}
                     >
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-2xl">{feature.icon}</span>
-                        <h5 className="font-semibold text-sm sm:text-base">{feature.title}</h5>
+                      <img
+                        src={screen.image || "/placeholder.svg"}
+                        alt={screen.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors" />
+                      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+                        <span className="text-xs font-medium text-white block">{screen.title}</span>
                       </div>
-                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">{feature.description}</p>
+                      {currentScreenshot === index && (
+                        <div className="absolute top-2 right-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                          <Play className="h-3 w-3 text-white" />
+                        </div>
+                      )}
                     </motion.div>
                   ))}
                 </div>
 
-                {/* Interactive Screenshots Section */}
-                <div className="mt-6 sm:mt-8 text-center">
-                  <h5 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">App Screenshots</h5>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-                    {appScreenshots.map((screen, index) => (
-                      <motion.div
-                        key={index}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setCurrentScreenshot(index)}
-                        className={`aspect-[9/16] rounded-lg overflow-hidden cursor-pointer transition-all duration-300 relative ${
-                          currentScreenshot === index ? "ring-2 ring-primary scale-105" : ""
-                        }`}
-                      >
-                        <img
-                          src={screen.image || "/placeholder.svg"}
-                          alt={screen.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors" />
-                        <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
-                          <span className="text-xs font-medium text-white block">{screen.title}</span>
-                        </div>
-                        {currentScreenshot === index && (
-                          <div className="absolute top-2 right-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                            <Play className="h-3 w-3 text-white" />
-                          </div>
-                        )}
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Swipe Instructions */}
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
-                    className="text-xs text-gray-500 dark:text-gray-400 mt-3"
-                  >
-                    Swipe left/right on the phone screen to navigate screenshots
-                  </motion.p>
-                </div>
+                {/* Swipe Instructions */}
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1 }}
+                  className="text-xs text-gray-500 dark:text-gray-400 mt-3"
+                >
+                  Swipe left/right on the phone screen to navigate screenshots
+                </motion.p>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
