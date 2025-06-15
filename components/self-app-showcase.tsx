@@ -346,7 +346,7 @@ export default function SelfAppShowcase() {
                     repeat: Number.POSITIVE_INFINITY,
                     ease: "easeInOut",
                   }}
-                  className="relative w-180 aspect-[9/19.5] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[1.5rem] p-1 shadow-2xl"
+                  className="relative w-80 aspect-[9/19.5] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[1.5rem] p-1 shadow-2xl"
                 >
                   {/* Screen */}
                   <div className="w-full h-full bg-black rounded-[1.2rem] overflow-hidden relative">
