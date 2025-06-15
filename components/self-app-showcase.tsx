@@ -17,36 +17,7 @@ const appScreenshots = [
     image: "/self1.jpeg?height=600&width=300",
     gradient: "from-purple-500 to-pink-500",
   },
-  {
-    title: "Memory Manager",
-    description: "Organize your memories",
-    image: "/self2.jpeg?height=600&width=300",
-    gradient: "from-blue-500 to-cyan-500",
-  },
-  {
-    title: "Finance Tracker",
-    description: "Track expenses and income",
-    image: "/self3.jpeg?height=600&width=300",
-    gradient: "from-green-500 to-emerald-500",
-  },
-  {
-    title: "Habit Tracker",
-    description: "Build positive habits",
-    image: "/self4.jpeg?height=600&width=300",
-    gradient: "from-orange-500 to-red-500",
-  },
-  {
-    title: "Assignments",
-    description: "Manage your tasks",
-    image: "/self5.jpeg?height=600&width=300",
-    gradient: "from-indigo-500 to-purple-500",
-  },
-  {
-    title: "Self Development",
-    description: "Track your growth",
-    image: "/self6.jpeg?height=600&width=300",
-    gradient: "from-pink-500 to-rose-500",
-  },
+  
 ]
 
 // Self App Features
@@ -375,7 +346,7 @@ export default function SelfAppShowcase() {
                     repeat: Number.POSITIVE_INFINITY,
                     ease: "easeInOut",
                   }}
-                  className="relative w-40 aspect-[9/19.5] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[1.5rem] p-1 shadow-2xl"
+                  className="relative w-180 aspect-[9/19.5] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[1.5rem] p-1 shadow-2xl"
                 >
                   {/* Screen */}
                   <div className="w-full h-full bg-black rounded-[1.2rem] overflow-hidden relative">
