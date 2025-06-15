@@ -14,37 +14,37 @@ const appScreenshots = [
   {
     title: "Dashboard",
     description: "Main overview with quick stats",
-    image: "/self1.png?height=600&width=300",
+    image: "/self1.jpeg?height=600&width=300",
     gradient: "from-purple-500 to-pink-500",
   },
   {
     title: "Memory Manager",
     description: "Organize your memories",
-    image: "/self2.png?height=600&width=300",
+    image: "/self2.jpeg?height=600&width=300",
     gradient: "from-blue-500 to-cyan-500",
   },
   {
     title: "Finance Tracker",
     description: "Track expenses and income",
-    image: "/self3.png?height=600&width=300",
+    image: "/self3.jpeg?height=600&width=300",
     gradient: "from-green-500 to-emerald-500",
   },
   {
     title: "Habit Tracker",
     description: "Build positive habits",
-    image: "/self4.png.svg?height=600&width=300",
+    image: "/self4.jpeg?height=600&width=300",
     gradient: "from-orange-500 to-red-500",
   },
   {
     title: "Assignments",
     description: "Manage your tasks",
-    image: "/self5.png?height=600&width=300",
+    image: "/self5.jpeg?height=600&width=300",
     gradient: "from-indigo-500 to-purple-500",
   },
   {
     title: "Self Development",
     description: "Track your growth",
-    image: "/self6.png?height=600&width=300",
+    image: "/self6.jpeg?height=600&width=300",
     gradient: "from-pink-500 to-rose-500",
   },
 ]
@@ -297,7 +297,7 @@ export default function SelfAppShowcase() {
 
                       {/* Your App Icon */}
                       <Image
-                        src="/images/self-app-icon.png"
+                        src="/self.png"
                         alt="Self App Icon"
                         width={32}
                         height={32}
