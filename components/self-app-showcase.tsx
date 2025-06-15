@@ -634,7 +634,7 @@ export default function SelfAppShowcase() {
 
                       {/* Your App Icon */}
                       <Image
-                        src="/images/self-app-icon.png"
+                        src="/self.png"
                         alt="Self App Icon"
                         width={48}
                         height={48}
@@ -812,47 +812,6 @@ export default function SelfAppShowcase() {
               </div>
 
               {/* Interactive Screenshots Section */}
-              <div className="mt-6 sm:mt-8 text-center">
-                <h5 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">App Screenshots</h5>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-                  {appScreenshots.map((screen, index) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setCurrentScreenshot(index)}
-                      className={`aspect-[9/16] rounded-lg overflow-hidden cursor-pointer transition-all duration-300 relative ${
-                        currentScreenshot === index ? "ring-2 ring-primary scale-105" : ""
-                      }`}
-                    >
-                      <img
-                        src={screen.image || "/placeholder.svg"}
-                        alt={screen.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors" />
-                      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
-                        <span className="text-xs font-medium text-white block">{screen.title}</span>
-                      </div>
-                      {currentScreenshot === index && (
-                        <div className="absolute top-2 right-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                          <Play className="h-3 w-3 text-white" />
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Swipe Instructions */}
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 }}
-                  className="text-xs text-gray-500 dark:text-gray-400 mt-3"
-                >
-                  Swipe left/right on the phone screen to navigate screenshots
-                </motion.p>
-              </div>
             </div>
           </motion.div>
         </motion.div>
