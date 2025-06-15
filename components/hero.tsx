@@ -2,28 +2,12 @@
 
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Smartphone, Globe, ChevronDown } from "lucide-react"
+import { ArrowRight, Smartphone, Globe } from "lucide-react"
 import Header from "@/components/header"
 import { TypeAnimation } from "react-type-animation"
 import Image from "next/image"
 
 export default function Hero() {
-  // Function to handle smooth scrolling to the bottom
-  const scrollToBottom = () => {
-    // Get the contact section of the page
-    const contactSection = document.getElementById("contact")
-
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" })
-    } else {
-      // If contact section doesn't exist, scroll to the bottom of the page
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth",
-      })
-    }
-  }
-
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <Header />
@@ -35,7 +19,7 @@ export default function Hero() {
       </div>
 
       {/* Added pt-24 to create more space between navigation and hero content */}
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-20 pt-24 md:pt-28 flex flex-col items-center text-center z-10">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-20 pt-32 md:pt-40 flex flex-col items-center text-center z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -135,34 +119,6 @@ export default function Hero() {
             >
               Contact Me
             </Button>
-          </motion.div>
-
-          {/* Scroll Down Button - Now positioned below the Contact Me button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-12 flex justify-center"
-            onClick={scrollToBottom}
-            style={{ cursor: "pointer" }}
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}
-              className="flex flex-col items-center"
-            >
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-2">Scroll Down</span>
-              <div className="flex flex-col items-center">
-                <div className="w-6 h-10 rounded-full border-2 border-gray-400 dark:border-gray-600 flex justify-center pt-2 mb-2">
-                  <motion.div
-                    animate={{ y: [0, 12, 0] }}
-                    transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
-                    className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500"
-                  />
-                </div>
-                <ChevronDown className="h-5 w-5 text-gray-400 dark:text-gray-500 animate-bounce" />
-              </div>
-            </motion.div>
           </motion.div>
         </motion.div>
       </div>

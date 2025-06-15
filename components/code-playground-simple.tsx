@@ -320,7 +320,7 @@ function highlightCode(code: string, language: string) {
     highlighted = highlighted.replace(/([.#][a-zA-Z0-9_-]+)/g, '<span style="color: #61afef;">$1</span>')
 
     // CSS comments
-    highlighted = highlighted.replace(/(\/\*.*?\*\/)/gs, '<span style="color: #7f848e;">$1</span>')
+    highlighted = highlighted.replace(/(\/\*.*?\*\/)/g, '<span style="color: #7f848e;">$1</span>')
   }
 
   return highlighted

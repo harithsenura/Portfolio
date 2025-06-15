@@ -45,7 +45,7 @@ export default function About() {
           >
             <div className="relative z-10 overflow-hidden rounded-2xl shadow-xl">
               <Image
-                src="/ab1.png?height=600&width=600"
+                src="/About.png?height=600&width=600"
                 alt="Professional Portrait"
                 width={600}
                 height={600}

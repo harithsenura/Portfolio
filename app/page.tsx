@@ -10,6 +10,7 @@ import Testimonials from "@/components/testimonials"
 import Contact from "@/components/contact"
 import Footer from "@/components/footer"
 import AnimatedBackground from "@/components/animated-background"
+import SelfAppShowcase from "@/components/self-app-showcase"
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <Skills />
       <CodePlaygroundSimple />
       <Projects />
+      <SelfAppShowcase />
       <Experience />
       <Testimonials />
       <Contact />

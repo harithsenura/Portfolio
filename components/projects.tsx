@@ -29,9 +29,9 @@ const webProjects = [
       "Reporting and revenue analytics",
     ],
     images: [
-      "/HSM.png?height=600&width=800",
-      "/HSM1.png?height=600&width=800",
-      "/HSM2.png?height=600&width=800",
+      "/HMS.png?height=600&width=800",
+      "/HMS1.png?height=600&width=800",
+      "/HMS2.png?height=600&width=800",
     ],
     tags: ["React", "Node.js", "MongoDB", "Express", "Tailwind"],
     demoLink: "https://hotel-management-system-red.vercel.app/",
