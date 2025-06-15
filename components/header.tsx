@@ -302,7 +302,7 @@ export default function Header() {
                       >
                         <Link
                           href={item.href}
-                          className="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-all duration-200 rounded-xl hover:bg-white/20 dark:hover:bg-gray-800/30 backdrop-blur-sm group"
+                          className="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-all duration-200 rounded-xl hover:bg-white/10 dark:hover:bg-white/5 group"
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           <motion.span
