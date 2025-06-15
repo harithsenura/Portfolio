@@ -17,7 +17,6 @@ const appScreenshots = [
     image: "/self1.jpeg?height=600&width=300",
     gradient: "from-purple-500 to-pink-500",
   },
-  
 ]
 
 // Self App Features
@@ -127,7 +126,11 @@ export default function SelfAppShowcase() {
   }
 
   return (
-    <section className="py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden">
+    <section
+      id="self-app-showcase"
+      data-section="self"
+      className="self-app-showcase py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden"
+    >
       {/* Liquid Glass Background */}
       <div className="absolute inset-0 -z-10">
         {/* Animated Liquid Blobs */}
@@ -202,6 +205,7 @@ export default function SelfAppShowcase() {
           </p>
         </motion.div>
 
+        {/* Rest of your component remains the same... */}
         {/* Self App Showcase */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -267,13 +271,7 @@ export default function SelfAppShowcase() {
                       />
 
                       {/* Your App Icon */}
-                      <Image
-                        src="/self.png"
-                        alt="Self App Icon"
-                        width={32}
-                        height={32}
-                        className="relative z-10"
-                      />
+                      <Image src="/self.png" alt="Self App Icon" width={32} height={32} className="relative z-10" />
                     </motion.div>
 
                     {/* Floating Particles */}
@@ -604,13 +602,7 @@ export default function SelfAppShowcase() {
                       />
 
                       {/* Your App Icon */}
-                      <Image
-                        src="/self.png"
-                        alt="Self App Icon"
-                        width={48}
-                        height={48}
-                        className="relative z-10"
-                      />
+                      <Image src="/self.png" alt="Self App Icon" width={48} height={48} className="relative z-10" />
                     </motion.div>
 
                     {/* Floating Particles */}
