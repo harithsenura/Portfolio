@@ -1,103 +1,146 @@
 "use client"
 
+import type React from "react"
+
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { Calendar, Award, Code, Smartphone, MapPin, Users, TrendingUp, Star, ChevronDown } from "lucide-react"
+import { Code, ExternalLink, Github, Calendar, TrendingUp, Zap, Star, Play } from "lucide-react"
 import { GlassCard } from "@/components/ui/glass-card"
+import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
-const experiences = [
+const ongoingProjects = [
   {
-    title: "Senior Full-Stack Developer",
-    company: "TechInnovate",
-    location: "San Francisco, CA",
-    period: "2021 - Present",
-    duration: "3+ years",
-    description: "Leading development of web and mobile applications using React, Node.js, and React Native.",
-    achievements: [
-      "Led team of 8 developers across 3 major projects",
-      "Reduced deployment time by 70% with CI/CD",
-      "Increased application performance by 45%",
+    title: "Self - Life Planning App",
+    description:
+      "A comprehensive iOS application built with Swift for complete life management including memory tracking, financial management, habit building, and personal development.",
+    status: "In Development",
+    progress: 75,
+    category: "Mobile App",
+    technologies: ["Swift", "SwiftUI", "Core Data", "iOS"],
+    features: [
+      "Memory Management System",
+      "Financial Tracking",
+      "Habit Tracker",
+      "Dark Mode Support",
+      "Academic Schedule Management",
+      "Personal Development Tracking",
     ],
-    technologies: ["React", "Node.js", "TypeScript", "AWS"],
-    type: "web",
-    featured: true,
-    teamSize: "8",
-    impact: "45%↑",
-  },
-  {
-    title: "Mobile App Developer",
-    company: "AppCraft Studios",
-    location: "New York, NY",
-    period: "2018 - 2021",
-    duration: "3 years",
-    description: "Developed native Android and iOS applications for clients in various industries.",
-    achievements: [
-      "Delivered 15+ mobile applications to production",
-      "Achieved 4.8+ average app store rating",
-      "Reduced development time by 30%",
-    ],
-    technologies: ["React Native", "Flutter", "Swift", "Kotlin"],
+    teamSize: "Solo Project",
+    startDate: "2024",
+    expectedCompletion: "Q2 2025",
+    priority: "high",
     type: "mobile",
-    featured: true,
-    teamSize: "5",
-    impact: "4.8★",
+    image: "/self.png",
+    demoAvailable: true,
+    githubUrl: "#",
+    liveUrl: "#",
   },
   {
-    title: "Frontend Developer",
-    company: "WebSolutions Inc.",
-    location: "Austin, TX",
-    period: "2016 - 2018",
-    duration: "2 years",
-    description: "Built responsive web applications using React and Angular with pixel-perfect designs.",
-    achievements: [
-      "Improved website loading speed by 60%",
-      "Implemented responsive design for 20+ websites",
-      "Reduced bounce rate by 35%",
+    title: "Portfolio Website",
+    description:
+      "Modern portfolio website built with Next.js featuring liquid glass design, smooth animations, and responsive layouts. Showcases projects and professional experience.",
+    status: "Active",
+    progress: 90,
+    category: "Web App",
+    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    features: [
+      "Liquid Glass Design",
+      "Smooth Animations",
+      "Responsive Layout",
+      "Dark Mode Support",
+      "SEO Optimized",
+      "Performance Optimized",
     ],
-    technologies: ["React", "Angular", "JavaScript", "SASS"],
+    teamSize: "Solo Project",
+    startDate: "2024",
+    expectedCompletion: "Q1 2025",
+    priority: "high",
     type: "web",
-    featured: false,
-    teamSize: "4",
-    impact: "60%↑",
+    image: "/placeholder.svg?height=48&width=48",
+    demoAvailable: true,
+    githubUrl: "#",
+    liveUrl: "#",
   },
   {
-    title: "Junior Developer",
-    company: "CodeWorks",
-    location: "Remote",
-    period: "2014 - 2016",
-    duration: "2 years",
-    description: "Worked on web development projects using JavaScript, HTML, and CSS.",
-    achievements: [
-      "Contributed to 25+ client projects",
-      "Learned modern development practices",
-      "Built foundation in full-stack development",
+    title: "E-Commerce Platform",
+    description:
+      "Full-stack e-commerce solution with modern UI, payment integration, inventory management, and admin dashboard. Built for scalability and performance.",
+    status: "Planning",
+    progress: 25,
+    category: "Full Stack",
+    technologies: ["React", "Node.js", "MongoDB", "Stripe"],
+    features: [
+      "Product Management",
+      "Payment Integration",
+      "User Authentication",
+      "Admin Dashboard",
+      "Inventory Tracking",
+      "Order Management",
     ],
-    technologies: ["JavaScript", "HTML5", "CSS3", "jQuery"],
+    teamSize: "Solo Project",
+    startDate: "2024",
+    expectedCompletion: "Q3 2025",
+    priority: "medium",
     type: "web",
-    featured: false,
-    teamSize: "3",
-    impact: "25+",
+    image: "/placeholder.svg?height=48&width=48",
+    demoAvailable: false,
+    githubUrl: "#",
+    liveUrl: "#",
   },
 ]
 
-export default function Experience() {
+export default function OngoingProjects() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   })
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set())
+  const [showFeatures, setShowFeatures] = useState<Set<number>>(new Set())
+  const [currentProject, setCurrentProject] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
 
-  const toggleCard = (index: number) => {
-    const newExpanded = new Set(expandedCards)
-    if (newExpanded.has(index)) {
-      newExpanded.delete(index)
+  const toggleFeatures = (index: number) => {
+    const newShowFeatures = new Set(showFeatures)
+    if (newShowFeatures.has(index)) {
+      newShowFeatures.delete(index)
     } else {
-      newExpanded.add(index)
+      newShowFeatures.add(index)
     }
-    setExpandedCards(newExpanded)
+    setShowFeatures(newShowFeatures)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe && currentProject < ongoingProjects.length - 1) {
+      setCurrentProject((prev) => prev + 1)
+    }
+    if (isRightSwipe && currentProject > 0) {
+      setCurrentProject((prev) => prev - 1)
+    }
+  }
+
+  const nextProject = () => {
+    setCurrentProject((prev) => (prev + 1) % ongoingProjects.length)
+  }
+
+  const prevProject = () => {
+    setCurrentProject((prev) => (prev - 1 + ongoingProjects.length) % ongoingProjects.length)
   }
 
   const containerVariants = {
@@ -105,16 +148,16 @@ export default function Experience() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.2,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
-      x: 0,
+      y: 0,
       transition: {
         type: "spring",
         damping: 25,
@@ -123,30 +166,56 @@ export default function Experience() {
     },
   }
 
-  const timelineVariants = {
-    hidden: { height: 0 },
-    visible: {
-      height: "100%",
-      transition: {
-        duration: 1.2,
-        ease: "easeInOut",
-      },
-    },
-  }
-
   return (
-    <section className="py-12 md:py-16 bg-gray-50/50 dark:bg-gray-900/20 relative overflow-hidden">
-      {/* Background Elements */}
+    <section className="py-12 md:py-16 relative overflow-hidden">
+      {/* Liquid Glass Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/4 left-1/4 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-r from-primary/6 to-purple-500/6 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute bottom-1/4 right-1/4 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-r from-blue-500/6 to-cyan-500/6 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s" }}
+        {/* Animated Liquid Blobs */}
+        <motion.div
+          animate={{
+            x: [0, 100, 0],
+            y: [0, -50, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+          className="absolute top-1/4 left-1/4 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-r from-primary/6 to-purple-500/6 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            x: [0, -80, 0],
+            y: [0, 60, 0],
+            scale: [1, 0.8, 1],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+            delay: 5,
+          }}
+          className="absolute bottom-1/4 right-1/4 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-r from-blue-500/6 to-cyan-500/6 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            x: [0, 60, 0],
+            y: [0, -80, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+            delay: 10,
+          }}
+          className="absolute top-1/2 right-1/3 w-36 h-36 md:w-56 md:h-56 bg-gradient-to-r from-green-500/6 to-emerald-500/6 rounded-full blur-2xl"
         />
       </div>
 
       <div className="container mx-auto px-6 md:px-8">
-        {/* Experience Section Header */}
+        {/* Section Header */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
@@ -160,439 +229,383 @@ export default function Experience() {
             transition={{ delay: 0.2, type: "spring", damping: 15 }}
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary mb-3"
           >
-            <TrendingUp className="h-2.5 w-2.5" />
-            <span className="text-xs font-medium">Career Journey</span>
+            <Zap className="h-2.5 w-2.5" />
+            <span className="text-xs font-medium">Currently Building</span>
           </motion.div>
 
           <h2 className="text-xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-gray-900 via-primary to-purple-600 dark:from-white dark:via-primary dark:to-purple-400 bg-clip-text text-transparent">
-            Professional Experience
+            Ongoing Projects
           </h2>
           <div className="w-12 h-0.5 bg-gradient-to-r from-primary to-purple-500 mx-auto mb-4 rounded-full"></div>
           <p className="text-gray-600 dark:text-gray-300 max-w-lg mx-auto text-xs md:text-sm">
-            My journey in web and mobile development
+            Current projects in active development
           </p>
         </motion.div>
 
-        {/* Mobile Layout - Completely Different Structure */}
-        <div className="block md:hidden">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="space-y-6"
-          >
-            {experiences.map((experience, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className="relative"
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                {/* Mobile Timeline Dot - Left Side */}
-                <div className="absolute left-0 top-4 z-10">
-                  <motion.div whileHover={{ scale: 1.1 }} className="relative">
-                    <div
-                      className={`w-4 h-4 rounded-full border-2 ${
-                        experience.featured
-                          ? "border-primary bg-primary shadow-sm shadow-primary/30"
-                          : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
-                      } transition-all duration-300`}
-                    >
-                      {experience.featured && (
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                          className="absolute -inset-1 rounded-full border border-dashed border-primary/25"
-                        />
-                      )}
-                    </div>
+        {/* Single Project Display with Swipe */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          className="max-w-4xl mx-auto relative"
+        >
+          {/* Project Navigation Arrows - Desktop */}
+          <div className="hidden md:block">
+            <button
+              onClick={prevProject}
+              disabled={currentProject === 0}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-16 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-primary hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed z-10"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
 
-                    {/* Icon */}
-                    <div className="absolute -inset-2 flex items-center justify-center">
-                      <div
-                        className={`p-1 rounded-full ${
-                          experience.type === "web" ? "bg-primary/10 text-primary" : "bg-green-500/10 text-green-500"
-                        }`}
-                      >
-                        {experience.type === "web" ? <Code className="h-2 w-2" /> : <Smartphone className="h-2 w-2" />}
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Mobile Card - With Proper Spacing */}
-                <div className="ml-12 mr-2">
-                  <motion.div
-                    whileHover={{
-                      y: -2,
-                      transition: { type: "spring", damping: 25 },
-                    }}
-                    className="relative"
-                  >
-                    <GlassCard
-                      className={`p-4 transition-all duration-300 cursor-pointer ${
-                        hoveredIndex === index ? "shadow-lg shadow-primary/5" : ""
-                      }`}
-                      onClick={() => toggleCard(index)}
-                    >
-                      {/* Featured Badge */}
-                      {experience.featured && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.2, type: "spring" }}
-                          className="absolute -top-1 -right-1 bg-gradient-to-r from-primary to-purple-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1"
-                        >
-                          <Star className="h-2 w-2" />
-                          <span>Top</span>
-                        </motion.div>
-                      )}
-
-                      {/* Header */}
-                      <div className="mb-3">
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="text-base font-bold text-gray-900 dark:text-white leading-tight pr-2">
-                            {experience.title}
-                          </h3>
-                          <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full shrink-0">
-                            <Calendar className="h-2.5 w-2.5 mr-1" />
-                            {experience.duration}
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="flex items-center text-primary font-medium text-sm">
-                            <Award className="h-3 w-3 mr-1" />
-                            {experience.company}
-                          </div>
-                          <div className="flex items-center text-gray-600 dark:text-gray-400 text-sm">
-                            <MapPin className="h-2.5 w-2.5 mr-1" />
-                            {experience.location}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">{experience.period}</div>
-                        </div>
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-gray-700 dark:text-gray-300 mb-3 text-sm leading-relaxed">
-                        {experience.description}
-                      </p>
-
-                      {/* Stats */}
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center text-sm">
-                            <Users className="h-3 w-3 text-primary mr-1" />
-                            <span className="text-gray-600 dark:text-gray-400">{experience.teamSize}</span>
-                          </div>
-                          <div className="flex items-center text-sm">
-                            <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
-                            <span className="text-green-600 font-medium">{experience.impact}</span>
-                          </div>
-                        </div>
-
-                        <motion.div
-                          animate={{ rotate: expandedCards.has(index) ? 180 : 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <ChevronDown className="h-4 w-4 text-gray-400" />
-                        </motion.div>
-                      </div>
-
-                      {/* Technologies */}
-                      <div className="mb-3">
-                        <div className="flex flex-wrap gap-1.5">
-                          {experience.technologies.slice(0, 4).map((tech, techIndex) => (
-                            <motion.span
-                              key={techIndex}
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              transition={{ delay: 0.02 * techIndex }}
-                              className={`text-sm px-2 py-1 rounded-full font-medium ${
-                                experience.type === "web"
-                                  ? "bg-primary/10 text-primary"
-                                  : "bg-green-500/10 text-green-600"
-                              }`}
-                            >
-                              {tech}
-                            </motion.span>
-                          ))}
-                          {experience.technologies.length > 4 && (
-                            <span className="text-sm px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                              +{experience.technologies.length - 4}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Expandable Achievements */}
-                      <motion.div
-                        initial={false}
-                        animate={{
-                          height: expandedCards.has(index) ? "auto" : 0,
-                          opacity: expandedCards.has(index) ? 1 : 0,
-                        }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
-                          <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
-                            <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-                            Key Achievements
-                          </h4>
-                          <ul className="space-y-1.5">
-                            {experience.achievements.map((achievement, achievementIndex) => (
-                              <li
-                                key={achievementIndex}
-                                className="flex items-start text-sm text-gray-600 dark:text-gray-300"
-                              >
-                                <div className="w-1 h-1 rounded-full bg-gradient-to-r from-primary to-purple-500 mt-2 mr-2 flex-shrink-0" />
-                                {achievement}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </motion.div>
-                    </GlassCard>
-                  </motion.div>
-                </div>
-
-                {/* Mobile Timeline Line */}
-                {index < experiences.length - 1 && (
-                  <div className="absolute left-2 top-8 w-px h-16 bg-gradient-to-b from-primary/30 to-primary/10" />
-                )}
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Desktop Layout - Original Structure */}
-        <div className="hidden md:block relative max-w-4xl mx-auto">
-          {/* Timeline Line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/15 to-transparent transform -translate-x-1/2">
-            <motion.div
-              variants={timelineVariants}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
-              className="w-full bg-gradient-to-b from-primary via-purple-500 to-primary rounded-full"
-            />
+            <button
+              onClick={nextProject}
+              disabled={currentProject === ongoingProjects.length - 1}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-16 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-primary hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed z-10"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="space-y-4 md:space-y-6"
+          {/* Swipeable Container */}
+          <div
+            className="relative overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
-            {experiences.map((experience, index) => (
+            <motion.div
+              key={currentProject}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="relative"
+              onMouseEnter={() => setHoveredIndex(currentProject)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
               <motion.div
-                key={index}
-                variants={itemVariants}
-                className={`relative flex flex-row items-start ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
+                whileHover={{
+                  y: -4,
+                  transition: { type: "spring", damping: 25 },
+                }}
+                className="relative"
               >
-                {/* Timeline Node */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 translate-y-3 z-10">
-                  <motion.div whileHover={{ scale: 1.1 }} className="relative">
-                    <div
-                      className={`w-4 h-4 rounded-full border-2 ${
-                        experience.featured
-                          ? "border-primary bg-primary shadow-sm shadow-primary/30"
-                          : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
-                      } transition-all duration-300`}
+                <GlassCard
+                  className={`p-4 sm:p-6 md:p-8 transition-all duration-300 ${
+                    hoveredIndex === currentProject ? "shadow-xl shadow-primary/10" : ""
+                  }`}
+                >
+                  {/* Priority Badge */}
+                  {ongoingProjects[currentProject].priority === "high" && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.3, type: "spring" }}
+                      className="absolute -top-1 -right-1 bg-gradient-to-r from-primary to-purple-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1"
                     >
-                      {experience.featured && (
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                          className="absolute -inset-1 rounded-full border border-dashed border-primary/25"
-                        />
-                      )}
-                    </div>
+                      <Star className="h-2.5 w-2.5" />
+                      <span>Priority</span>
+                    </motion.div>
+                  )}
 
-                    {/* Icon */}
-                    <div className="absolute -inset-2.5 flex items-center justify-center">
-                      <div
-                        className={`p-1.5 rounded-full ${
-                          experience.type === "web" ? "bg-primary/10 text-primary" : "bg-green-500/10 text-green-500"
-                        }`}
-                      >
-                        {experience.type === "web" ? (
-                          <Code className="h-2.5 w-2.5" />
-                        ) : (
-                          <Smartphone className="h-2.5 w-2.5" />
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Content Card */}
-                <div className={`w-5/12 ${index % 2 === 0 ? "mr-auto pr-8" : "ml-auto pl-8"}`}>
-                  <motion.div
-                    whileHover={{
-                      y: -2,
-                      transition: { type: "spring", damping: 25 },
-                    }}
-                    className="relative"
-                  >
-                    <GlassCard
-                      className={`p-4 transition-all duration-300 cursor-pointer ${
-                        hoveredIndex === index ? "shadow-lg shadow-primary/5" : ""
-                      }`}
-                      onClick={() => toggleCard(index)}
-                    >
-                      {/* Featured Badge */}
-                      {experience.featured && (
+                  {/* Project Header */}
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4 sm:mb-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-3">
+                        {/* Project Icon */}
                         <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.2, type: "spring" }}
-                          className="absolute -top-0.5 -right-0.5 bg-gradient-to-r from-primary to-purple-500 text-white px-1.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-0.5"
+                          animate={{
+                            rotate: [0, 5, -5, 0],
+                            scale: [1, 1.05, 1],
+                          }}
+                          transition={{
+                            duration: 4,
+                            repeat: Number.POSITIVE_INFINITY,
+                            ease: "easeInOut",
+                          }}
+                          className="relative"
                         >
-                          <Star className="h-1.5 w-1.5" />
-                          <span className="text-xs">Top</span>
-                        </motion.div>
-                      )}
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl shadow-lg flex items-center justify-center overflow-hidden">
+                            <img
+                              src={ongoingProjects[currentProject].image || "/placeholder.svg"}
+                              alt={`${ongoingProjects[currentProject].title} icon`}
+                              className="w-6 h-6 sm:w-8 sm:h-8 object-cover"
+                            />
+                          </div>
 
-                      {/* Compact Header */}
-                      <div className="mb-2">
-                        <div className="flex items-start justify-between mb-1">
-                          <h3 className="text-base font-bold text-gray-900 dark:text-white leading-tight pr-2">
-                            {experience.title}
+                          {/* Floating particles around icon */}
+                          {[...Array(3)].map((_, i) => (
+                            <motion.div
+                              key={i}
+                              animate={{
+                                y: [0, -15, 0],
+                                x: [0, Math.sin(i) * 10, 0],
+                                opacity: [0, 1, 0],
+                                scale: [0, 1, 0],
+                              }}
+                              transition={{
+                                duration: 3,
+                                repeat: Number.POSITIVE_INFINITY,
+                                delay: i * 0.5,
+                                ease: "easeInOut",
+                              }}
+                              className="absolute w-1 h-1 bg-gradient-to-r from-primary to-purple-500 rounded-full"
+                              style={{
+                                top: `${20 + Math.sin(i * 60) * 20}%`,
+                                left: `${20 + Math.cos(i * 60) * 20}%`,
+                              }}
+                            />
+                          ))}
+                        </motion.div>
+
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-1 truncate">
+                            {ongoingProjects[currentProject].title}
                           </h3>
-                          <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-full shrink-0">
-                            <Calendar className="h-2 w-2 mr-0.5" />
-                            {experience.duration}
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col xs:flex-row xs:items-center gap-1 xs:gap-2 mb-1">
-                          <div className="flex items-center text-primary font-medium text-xs">
-                            <Award className="h-2.5 w-2.5 mr-1" />
-                            {experience.company}
-                          </div>
-                          <div className="flex items-center text-gray-600 dark:text-gray-400 text-xs">
-                            <MapPin className="h-2 w-2 mr-0.5" />
-                            {experience.location}
-                          </div>
-                        </div>
-
-                        <div className="text-xs text-gray-500 dark:text-gray-400">{experience.period}</div>
-                      </div>
-
-                      {/* Compact Description */}
-                      <p className="text-gray-700 dark:text-gray-300 mb-2 text-xs leading-relaxed">
-                        {experience.description}
-                      </p>
-
-                      {/* Inline Stats */}
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center text-xs">
-                            <Users className="h-2.5 w-2.5 text-primary mr-1" />
-                            <span className="text-gray-600 dark:text-gray-400">{experience.teamSize}</span>
-                          </div>
-                          <div className="flex items-center text-xs">
-                            <TrendingUp className="h-2.5 w-2.5 text-green-500 mr-1" />
-                            <span className="text-green-600 font-medium">{experience.impact}</span>
-                          </div>
-                        </div>
-
-                        <motion.div
-                          animate={{ rotate: expandedCards.has(index) ? 180 : 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <ChevronDown className="h-3 w-3 text-gray-400" />
-                        </motion.div>
-                      </div>
-
-                      {/* Technologies - Always Visible */}
-                      <div className="mb-2">
-                        <div className="flex flex-wrap gap-1">
-                          {experience.technologies.slice(0, 3).map((tech, techIndex) => (
-                            <motion.span
-                              key={techIndex}
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              transition={{ delay: 0.02 * techIndex }}
-                              className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
-                                experience.type === "web"
-                                  ? "bg-primary/10 text-primary"
-                                  : "bg-green-500/10 text-green-600"
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium w-fit ${
+                                ongoingProjects[currentProject].type === "mobile"
+                                  ? "bg-green-500/10 text-green-600"
+                                  : "bg-primary/10 text-primary"
                               }`}
                             >
-                              {tech}
-                            </motion.span>
-                          ))}
-                          {experience.technologies.length > 3 && (
-                            <span className="text-xs px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                              +{experience.technologies.length - 3}
+                              {ongoingProjects[currentProject].category}
                             </span>
-                          )}
+                            <div className="flex items-center text-xs text-orange-600 bg-orange-100 dark:bg-orange-900/20 px-2 py-1 rounded-full w-fit">
+                              <Calendar className="h-2.5 w-2.5 mr-1" />
+                              {ongoingProjects[currentProject].status}
+                            </div>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Expandable Achievements */}
-                      <motion.div
-                        initial={false}
-                        animate={{
-                          height: expandedCards.has(index) ? "auto" : 0,
-                          opacity: expandedCards.has(index) ? 1 : 0,
-                        }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                          <h4 className="text-xs font-semibold text-gray-900 dark:text-white mb-1.5 flex items-center">
-                            <TrendingUp className="h-2.5 w-2.5 mr-1 text-green-500" />
-                            Key Achievements
-                          </h4>
-                          <ul className="space-y-1">
-                            {experience.achievements.map((achievement, achievementIndex) => (
-                              <li
-                                key={achievementIndex}
-                                className="flex items-start text-xs text-gray-600 dark:text-gray-300"
-                              >
-                                <div className="w-0.5 h-0.5 rounded-full bg-gradient-to-r from-primary to-purple-500 mt-1.5 mr-1.5 flex-shrink-0" />
-                                {achievement}
-                              </li>
-                            ))}
-                          </ul>
+                      <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm md:text-base leading-relaxed">
+                        {ongoingProjects[currentProject].description}
+                      </p>
+                    </div>
+
+                    {/* Project Stats - Desktop */}
+                    <div className="hidden lg:block ml-6">
+                      <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 min-w-[200px]">
+                        <div className="space-y-3">
+                          <div>
+                            <div className="flex items-center justify-between text-sm mb-1">
+                              <span className="text-gray-600 dark:text-gray-400">Progress</span>
+                              <span className="font-medium text-primary">
+                                {ongoingProjects[currentProject].progress}%
+                              </span>
+                            </div>
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${ongoingProjects[currentProject].progress}%` }}
+                                transition={{ duration: 1.5, delay: 0.5 }}
+                                className="bg-gradient-to-r from-primary to-purple-500 h-2 rounded-full"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400">Team</span>
+                            <span className="font-medium">{ongoingProjects[currentProject].teamSize}</span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400">Started</span>
+                            <span className="font-medium">{ongoingProjects[currentProject].startDate}</span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400">Expected</span>
+                            <span className="font-medium text-green-600">
+                              {ongoingProjects[currentProject].expectedCompletion}
+                            </span>
+                          </div>
                         </div>
-                      </motion.div>
-                    </GlassCard>
+                      </div>
+                    </div>
+                  </div>
 
-                    {/* Connecting Line */}
-                    <div
-                      className={`absolute top-4 ${
-                        index % 2 === 0 ? "right-0 translate-x-full" : "left-0 -translate-x-full"
-                      } w-8 h-px bg-gradient-to-r ${
-                        index % 2 === 0 ? "from-transparent to-primary/15" : "from-primary/15 to-transparent"
-                      }`}
-                    />
+                  {/* Project Stats - Mobile/Tablet */}
+                  <div className="lg:hidden mb-4 sm:mb-6">
+                    <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-3 sm:p-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div>
+                          <div className="flex items-center justify-between text-sm mb-1">
+                            <span className="text-gray-600 dark:text-gray-400">Progress</span>
+                            <span className="font-medium text-primary">
+                              {ongoingProjects[currentProject].progress}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${ongoingProjects[currentProject].progress}%` }}
+                              transition={{ duration: 1.5, delay: 0.5 }}
+                              className="bg-gradient-to-r from-primary to-purple-500 h-2 rounded-full"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400">Team</span>
+                            <span className="font-medium">{ongoingProjects[currentProject].teamSize}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400">Expected</span>
+                            <span className="font-medium text-green-600">
+                              {ongoingProjects[currentProject].expectedCompletion}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Technologies */}
+                  <div className="mb-4 sm:mb-6">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
+                      <Code className="h-3 w-3 mr-1 text-primary" />
+                      Tech Stack
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {ongoingProjects[currentProject].technologies.map((tech, techIndex) => (
+                        <motion.span
+                          key={techIndex}
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.1 * techIndex }}
+                          className={`text-sm px-3 py-1 rounded-full font-medium ${
+                            ongoingProjects[currentProject].type === "mobile"
+                              ? "bg-green-500/10 text-green-600"
+                              : "bg-primary/10 text-primary"
+                          }`}
+                        >
+                          {tech}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                    <Button
+                      onClick={() => toggleFeatures(currentProject)}
+                      className="rounded-full px-4 sm:px-6 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-sm"
+                    >
+                      <Play className="mr-2 h-4 w-4" />
+                      {showFeatures.has(currentProject) ? "Hide Features" : "View Features"}
+                    </Button>
+
+                    <div className="flex gap-2">
+                      {ongoingProjects[currentProject].demoAvailable && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-full px-3 sm:px-4 text-sm"
+                          onClick={() => window.open(ongoingProjects[currentProject].liveUrl, "_blank")}
+                        >
+                          <ExternalLink className="mr-2 h-3 w-3" />
+                          Demo
+                        </Button>
+                      )}
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-3 sm:px-4 text-sm"
+                        onClick={() => window.open(ongoingProjects[currentProject].githubUrl, "_blank")}
+                      >
+                        <Github className="mr-2 h-3 w-3" />
+                        Code
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Expandable Features */}
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      height: showFeatures.has(currentProject) ? "auto" : 0,
+                      opacity: showFeatures.has(currentProject) ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.4 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                      <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
+                        <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
+                        Key Features
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {ongoingProjects[currentProject].features.map((feature, featureIndex) => (
+                          <motion.div
+                            key={featureIndex}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: featureIndex * 0.1 }}
+                            className="flex items-center text-sm text-gray-600 dark:text-gray-300 p-2 rounded-lg bg-white/30 dark:bg-gray-800/30"
+                          >
+                            <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-primary to-purple-500 mr-2 flex-shrink-0" />
+                            {feature}
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
                   </motion.div>
-                </div>
+                </GlassCard>
               </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Mobile Navigation Arrows */}
+          <div className="md:hidden flex justify-center gap-4 mt-4">
+            <button
+              onClick={prevProject}
+              disabled={currentProject === 0}
+              className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-primary hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <button
+              onClick={nextProject}
+              disabled={currentProject === ongoingProjects.length - 1}
+              className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-primary hover:bg-white/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Project Indicators */}
+          <div className="flex justify-center gap-2 mt-6">
+            {ongoingProjects.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentProject(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentProject
+                    ? "bg-primary scale-125 shadow-sm shadow-primary/30"
+                    : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
+                }`}
+              />
             ))}
-          </motion.div>
+          </div>
+        </motion.div>
 
-          {/* Timeline End */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
-            transition={{ delay: 1, type: "spring" }}
-            className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-4"
-          >
-            <div className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-purple-500 shadow-sm">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-purple-500 animate-ping opacity-75" />
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Compact CTA */}
+        {/* Bottom CTA */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
@@ -600,7 +613,7 @@ export default function Experience() {
           className="text-center mt-8"
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/6 to-purple-500/6 border border-primary/10 text-xs">
-            <span className="text-gray-700 dark:text-gray-300">Ready to discuss your project?</span>
+            <span className="text-gray-700 dark:text-gray-300">Interested in collaborating?</span>
             <motion.div animate={{ x: [0, 2, 0] }} transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}>
               →
             </motion.div>

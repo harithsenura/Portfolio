@@ -9,7 +9,7 @@ import { AnimatedTechIcon } from "@/components/ui/animated-tech-icon"
 
 // Technology icons mapping
 const techIcons = {
-  React: "/placeholder.svg?height=40&width=40",
+  React: "/react.png?height=40&width=40",
   "Next.js": "/placeholder.svg?height=40&width=40",
   TypeScript: "/placeholder.svg?height=40&width=40",
   JavaScript: "/placeholder.svg?height=40&width=40",

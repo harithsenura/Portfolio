@@ -23,7 +23,6 @@ export default function Home() {
       <Projects />
       <SelfAppShowcase />
       <Experience />
-      <Testimonials />
       <Contact />
       <Footer />
     </main>

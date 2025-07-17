@@ -111,7 +111,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm">© {new Date().getFullYear()} DevPortfolio. All rights reserved.</p>
+          <p className="text-gray-500 text-sm">© {new Date().getFullYear()} Made by Harith Divarathna</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="#" className="text-sm text-gray-500 hover:text-primary">
               Privacy Policy

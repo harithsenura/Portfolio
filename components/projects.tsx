@@ -28,11 +28,7 @@ const webProjects = [
       "Room service and housekeeping management",
       "Reporting and revenue analytics",
     ],
-    images: [
-      "/HMS.png?height=600&width=800",
-      "/HMS1.png?height=600&width=800",
-      "/HMS2.png?height=600&width=800",
-    ],
+    images: ["/HMS.png?height=600&width=800", "/HMS1.png?height=600&width=800", "/HMS2.png?height=600&width=800"],
     tags: ["React", "Node.js", "MongoDB", "Express", "Tailwind"],
     demoLink: "https://hotel-management-system-red.vercel.app/",
     codeLink: "https://github.com/harithsenura/Hotel-Management-System.git",
@@ -265,7 +261,7 @@ export default function Projects() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
       },
     },
   }
@@ -286,11 +282,11 @@ export default function Projects() {
   const getActiveProjects = () => {
     switch (activeCategory) {
       case "web":
-        return webProjects.slice(0, 3) // Exactly 3 web projects
+        return webProjects.slice(0, 3)
       case "android":
-        return androidProjects.slice(0, 3) // Exactly 3 android projects
+        return androidProjects.slice(0, 3)
       case "ios":
-        return iosProjects.slice(0, 3) // Exactly 3 iOS projects
+        return iosProjects.slice(0, 3)
       default:
         return webProjects.slice(0, 3)
     }
@@ -302,57 +298,60 @@ export default function Projects() {
   }
 
   return (
-    <section id="projects" className="py-20 bg-gray-50/50 dark:bg-gray-900/20">
-      <div className="container mx-auto px-4 sm:px-6 md:px-8">
+    <section id="projects" className="py-12 sm:py-16 lg:py-20 bg-gray-50/50 dark:bg-gray-900/20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Projects</h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-8 rounded-full"></div>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
+          {/* Header Section */}
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 px-4">
+            Featured Projects
+          </h2>
+          <div className="w-16 sm:w-20 h-1 bg-primary mx-auto mb-6 sm:mb-8 rounded-full"></div>
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8 sm:mb-10 text-sm sm:text-base lg:text-lg px-4">
             Showcasing my work in web and mobile application development
           </p>
 
-          {/* Category Tabs */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {/* Category Tabs - Fully Responsive */}
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-2 sm:gap-3 lg:gap-4 mb-8 sm:mb-12 px-4">
             <Button
               onClick={() => setActiveCategory("web")}
               variant={activeCategory === "web" ? "default" : "glass"}
-              className="rounded-full px-6 flex items-center gap-2"
+              className="w-full sm:w-auto rounded-full px-4 sm:px-6 py-2 sm:py-2.5 flex items-center justify-center gap-2 text-sm sm:text-base transition-all duration-300 hover:scale-105"
             >
-              <Globe className="h-4 w-4" />
-              Web Projects
+              <Globe className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span>Web Projects</span>
             </Button>
             <Button
               onClick={() => setActiveCategory("android")}
               variant={activeCategory === "android" ? "default" : "glass"}
-              className="rounded-full px-6 flex items-center gap-2"
+              className="w-full sm:w-auto rounded-full px-4 sm:px-6 py-2 sm:py-2.5 flex items-center justify-center gap-2 text-sm sm:text-base transition-all duration-300 hover:scale-105"
             >
-              <Android className="h-4 w-4" />
-              Android Projects
+              <Android className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span>Android Projects</span>
             </Button>
             <Button
               onClick={() => setActiveCategory("ios")}
               variant={activeCategory === "ios" ? "default" : "glass"}
-              className="rounded-full px-6 flex items-center gap-2"
+              className="w-full sm:w-auto rounded-full px-4 sm:px-6 py-2 sm:py-2.5 flex items-center justify-center gap-2 text-sm sm:text-base transition-all duration-300 hover:scale-105"
             >
-              <Apple className="h-4 w-4" />
-              iOS Projects
+              <Apple className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span>iOS Projects</span>
             </Button>
           </div>
         </motion.div>
 
-        {/* Projects Grid - Optimized for exactly 3 projects */}
+        {/* Projects Grid - Fully Responsive */}
         <motion.div
           key={activeCategory}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
         >
           {getActiveProjects().map((project, index) => (
             <motion.div
@@ -361,87 +360,143 @@ export default function Projects() {
               transition={{ duration: 0.5 }}
               className="flex flex-col h-full"
             >
-              <GlassCard className="group overflow-hidden p-0 h-full flex flex-col" hoverEffect={false}>
-                <div className="relative h-48 md:h-56 overflow-hidden">
+              <GlassCard
+                className="group overflow-hidden p-0 h-full flex flex-col hover:shadow-2xl transition-all duration-500"
+                hoverEffect={false}
+              >
+                {/* Project Image */}
+                <div className="relative h-40 sm:h-48 lg:h-56 xl:h-64 overflow-hidden">
                   <Image
                     src={project.images?.[0] || "/placeholder.svg?height=600&width=800"}
                     alt={project.title}
                     width={800}
                     height={600}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    priority={index < 3}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="glass"
-                        className="backdrop-blur-md bg-white/20 border border-white/10"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          window.open(project.demoLink, "_blank")
-                        }}
-                      >
-                        <ExternalLink className="h-3.5 w-3.5 mr-1" />
-                        Demo
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="glass"
-                        className="backdrop-blur-md bg-white/20 border border-white/10"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          window.open(project.codeLink, "_blank")
-                        }}
-                      >
-                        <Github className="h-3.5 w-3.5 mr-1" />
-                        Code
-                      </Button>
+                  {/* Featured Badge */}
+                  {project.featured && (
+                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                      <span className="bg-primary/90 text-white text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full backdrop-blur-sm font-medium">
+                        Featured
+                      </span>
                     </div>
-                    {project.featured && (
-                      <span className="bg-primary/90 text-white text-xs px-2 py-0.5 rounded-full">Featured</span>
-                    )}
-                  </div>
+                  )}
+                  {/* Gradient Overlay on Hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <div className="p-5 flex flex-col flex-grow">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-bold">{project.title}</h3>
+
+                {/* Card Content */}
+                <div className="p-4 sm:p-5 lg:p-6 flex flex-col flex-grow">
+                  {/* Title and Category Icon */}
+                  <div className="flex items-start justify-between mb-3 sm:mb-4">
+                    <h3 className="text-base sm:text-lg lg:text-xl font-bold leading-tight pr-2 flex-1">
+                      {project.title}
+                    </h3>
                     <GlassyIcon
                       icon={activeCategory === "web" ? Globe : activeCategory === "android" ? Android : Apple}
-                      size={14}
+                      size={12}
                       color={activeCategory === "web" ? "primary" : activeCategory === "android" ? "green" : "blue"}
-                      className="p-1.5"
+                      className="p-1.5 sm:p-2 flex-shrink-0"
                     />
                   </div>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm flex-grow">{project.description}</p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
+
+                  {/* Description */}
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 sm:mb-5 text-xs sm:text-sm lg:text-base flex-grow leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-4 sm:mb-5">
                     {project.tags.slice(0, 3).map((tag: string, tagIndex: number) => (
                       <span
                         key={tagIndex}
-                        className={`text-xs px-2 py-0.5 rounded-full ${
+                        className={`text-xs px-2 py-1 rounded-full font-medium transition-colors ${
                           activeCategory === "web"
-                            ? "bg-primary/10 text-primary dark:bg-primary/20"
+                            ? "bg-primary/10 text-primary dark:bg-primary/20 hover:bg-primary/20"
                             : activeCategory === "android"
-                              ? "bg-green-500/10 text-green-600 dark:bg-green-500/20"
-                              : "bg-blue-500/10 text-blue-600 dark:bg-blue-500/20"
+                              ? "bg-green-500/10 text-green-600 dark:bg-green-500/20 hover:bg-green-500/20"
+                              : "bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 hover:bg-blue-500/20"
                         }`}
                       >
                         {tag}
                       </span>
                     ))}
                     {project.tags.length > 3 && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                      <span className="text-xs px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-medium">
                         +{project.tags.length - 3}
                       </span>
                     )}
                   </div>
-                  <Button
-                    onClick={() => handleOpenDetails(project)}
-                    variant="glass"
-                    className="w-full rounded-full backdrop-blur-md bg-white/10 dark:bg-gray-800/20 border border-white/10 dark:border-gray-700/20 hover:bg-white/20 dark:hover:bg-gray-800/30 text-sm py-1.5"
-                  >
-                    <Info className="mr-2 h-3.5 w-3.5" />
-                    View Details
-                  </Button>
+
+                  {/* Action Buttons - Responsive Layout */}
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 lg:gap-3 mt-auto">
+                    {/* Mobile: Stack buttons vertically */}
+                    <div className="flex gap-2 sm:hidden">
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          window.open(project.demoLink, "_blank")
+                        }}
+                        variant="glass"
+                        className="flex-1 rounded-full backdrop-blur-xl bg-gradient-to-r from-white/10 to-white/5 dark:from-gray-800/20 dark:to-gray-800/10 border border-white/20 dark:border-gray-700/30 hover:from-white/20 hover:to-white/10 dark:hover:from-gray-800/30 dark:hover:to-gray-800/20 text-xs py-2.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        <ExternalLink className="mr-1.5 h-3 w-3" />
+                        Demo
+                      </Button>
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          window.open(project.codeLink, "_blank")
+                        }}
+                        variant="glass"
+                        className="flex-1 rounded-full backdrop-blur-xl bg-gradient-to-r from-white/10 to-white/5 dark:from-gray-800/20 dark:to-gray-800/10 border border-white/20 dark:border-gray-700/30 hover:from-white/20 hover:to-white/10 dark:hover:from-gray-800/30 dark:hover:to-gray-800/20 text-xs py-2.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        <Github className="mr-1.5 h-3 w-3" />
+                        Code
+                      </Button>
+                    </div>
+                    <Button
+                      onClick={() => handleOpenDetails(project)}
+                      variant="glass"
+                      className="w-full sm:hidden rounded-full backdrop-blur-xl bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 border border-primary/20 dark:border-primary/30 hover:from-primary/20 hover:to-primary/10 dark:hover:from-primary/30 dark:hover:to-primary/20 text-xs py-2.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Info className="mr-1.5 h-3 w-3" />
+                      View Details
+                    </Button>
+
+                    {/* Tablet and Desktop: Show buttons in a row */}
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        window.open(project.demoLink, "_blank")
+                      }}
+                      variant="glass"
+                      className="hidden sm:flex flex-1 rounded-full backdrop-blur-xl bg-gradient-to-r from-white/10 to-white/5 dark:from-gray-800/20 dark:to-gray-800/10 border border-white/20 dark:border-gray-700/30 hover:from-white/20 hover:to-white/10 dark:hover:from-gray-800/30 dark:hover:to-gray-800/20 text-xs sm:text-sm py-2 sm:py-2.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] items-center justify-center"
+                    >
+                      <ExternalLink className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                      Demo
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        window.open(project.codeLink, "_blank")
+                      }}
+                      variant="glass"
+                      className="hidden sm:flex flex-1 rounded-full backdrop-blur-xl bg-gradient-to-r from-white/10 to-white/5 dark:from-gray-800/20 dark:to-gray-800/10 border border-white/20 dark:border-gray-700/30 hover:from-white/20 hover:to-white/10 dark:hover:from-gray-800/30 dark:hover:to-gray-800/20 text-xs sm:text-sm py-2 sm:py-2.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] items-center justify-center"
+                    >
+                      <Github className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                      Code
+                    </Button>
+                    <Button
+                      onClick={() => handleOpenDetails(project)}
+                      variant="glass"
+                      className="hidden sm:flex flex-1 rounded-full backdrop-blur-xl bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 border border-primary/20 dark:border-primary/30 hover:from-primary/20 hover:to-primary/10 dark:hover:from-primary/30 dark:hover:to-primary/20 text-xs sm:text-sm py-2 sm:py-2.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] items-center justify-center"
+                    >
+                      <Info className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                      Details
+                    </Button>
+                  </div>
                 </div>
               </GlassCard>
             </motion.div>
@@ -449,8 +504,8 @@ export default function Projects() {
         </motion.div>
       </div>
 
-      {/* Project Details Modal */}
-      <LiquidGlassModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      {/* Project Details Modal - Responsive */}
+      <LiquidGlassModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="mx-4 sm:mx-6 lg:mx-8">
         {selectedProject && <ProjectDetails project={selectedProject} />}
       </LiquidGlassModal>
     </section>
